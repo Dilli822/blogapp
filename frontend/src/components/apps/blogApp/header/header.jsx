@@ -159,11 +159,14 @@ const AppHeader = () => {
       {/* Your Logo Component Here */}
       <div className="demo-logo" style={{ width: "50%" ,  padding: "2%",}}>
         {/* Add your logo component or image here */}
+        <Link to="/">
         <img
           src={logoImage}
           alt="Logo"
           style={{ width: "50px", verticalAlign: "middle" }}
+
         />
+        </Link>
       </div>
 
       {/* Menu component */}

@@ -19,6 +19,7 @@ import {
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
 import { Link } from "react-router-dom";
+import Forbidden from "../../error/unathorizedAccess";
 
 import {
   EditOutlined,
@@ -44,6 +45,7 @@ const UserProfile = () => {
   const [blogData, setBlogData] = useState([]);
   const [blogList, setBlogList] = useState([]);
   const [editImage, setEditImage] = useState(null);
+  const [isLogged, setIsLogged] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -79,10 +81,13 @@ const UserProfile = () => {
       if (response.ok) {
         // Successful deletion
         console.log("User account deleted successfully");
+   
 
         // Redirect to the specified path after successful deletion
         window.location.href = "/";
-      } else {
+      }
+
+       else {
         // Handle error
         console.error("Error deleting user account");
       }
@@ -113,10 +118,15 @@ const UserProfile = () => {
           const data = await response.json();
           setInitLoading(false);
           setBlogList(data);
+          setIsLogged(true)
 
           if (data.length > 0) {
             // console.log(data);
           }
+          else if(response.status === 401){
+            setIsLogged(false)
+          }
+
         } catch (error) {
           console.error(error);
         }
@@ -159,11 +169,16 @@ const UserProfile = () => {
 
       const data = await response.json();
       console.log(data);
+      setIsLogged(true)
       console.log(data.image);
       setFirstUserImg({ image: data.image });
 
       if (data.length > 0) {
         localStorage.setItem("user_image", data.image);
+      }
+
+      else if(response.status === 401){
+        setIsLogged(false)
       }
     } catch (error) {
       console.error(error);
@@ -204,6 +219,8 @@ const UserProfile = () => {
       console.error("Error:", error);
     }
   };
+
+
 
   const updateImage = async () => {
     try {
@@ -274,6 +291,11 @@ const UserProfile = () => {
   useEffect(() => {
     handleUserDetailSave();
   }, []);
+
+
+  if (!isLogged) {
+    return <Forbidden />;
+  }
 
   return (
     <>
