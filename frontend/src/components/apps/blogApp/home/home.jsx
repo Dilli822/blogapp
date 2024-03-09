@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppHeader from "../header/header";
 import AppFooter from "../footer/footer";
-
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import {
   Layout,
@@ -32,10 +31,10 @@ const Home = () => {
   const [isAdditionalVisible, setIsAdditionalVisible] = useState(false);
   const [recentBlogsData, setRecentBlogsData] = useState([]);
   const [randomBlogsData, setRandomBlogsData] = useState(null);
-  const [randomBlogId, setRandomBlogId] = useState(null);
   const [blogBannerData, setBlogBannerData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const currentDate = new Date().toLocaleDateString();
   const options = { day: "numeric", month: "short", year: "numeric" };
   const formattedDate = new Date(currentDate).toLocaleDateString(
@@ -94,7 +93,6 @@ const Home = () => {
       if (response.ok) {
         const data = await response.json();
         setRandomBlogsData(data);
-        console.log(data);
         setIsLoading(false);
       } else {
         console.error(
@@ -142,8 +140,8 @@ const Home = () => {
   }, []);
 
   return (
-    <>
-      <>
+    <div>
+      <div>
         <AppHeader></AppHeader>
 
         <Layout style={{ padding: "0 10%", minHeight: "80vh" }}>
@@ -358,6 +356,8 @@ const Home = () => {
               >
                 <Col xs={24} md={13} style={{}}>
                   <h1> How do I Publish Blog? </h1>
+                  <h3> You Must Login to Read Other Blogs. </h3>
+
                   <Timeline mode="left">
                     {timelineItems.map((item, index) => (
                       <Timeline.Item key={index} style={{ fontSize: "1rem" }}>
@@ -392,8 +392,8 @@ const Home = () => {
         </Layout>
 
         <AppFooter />
-      </>
-    </>
+      </div>
+    </div>
   );
 };
 export default Home;

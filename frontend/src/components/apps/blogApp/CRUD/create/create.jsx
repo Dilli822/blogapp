@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Layout, Typography, Input, Button, Col, message, Upload } from "antd";
+import React, { useEffect, useState } from "react";
+import { Layout, Typography, Input, Button, Col, message, Upload,  Alert,
+  Spin, } from "antd";
 import { SaveOutlined, UploadOutlined } from "@ant-design/icons";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
@@ -30,6 +31,8 @@ const Create = () => {
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleHeaderChange = (e) => {
     setHeader(e.target.value);
@@ -135,9 +138,38 @@ const Create = () => {
     }, 2000);
   };
 
+  useEffect(()=>{
+    setIsLoading(false)
+  })
+
   return (
     <>
       <AppHeader />
+      {isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "calc(100vh - 64px)", // Subtract the height of the header
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      ) : error ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "calc(100vh - 64px)", // Subtract the height of the header
+          }}
+        >
+          <Alert message={error} type="error" />
+        </div>
+      ) : (
+        <div>
+
       <Layout style={{ padding: "0 10%" }}>
         <Col>
           <Title> Publish/Write Blog</Title>
@@ -186,6 +218,8 @@ const Create = () => {
           </Button>
         </Col>
       </Layout>
+      </div>
+      )}
 
       <AppFooter />
     </>

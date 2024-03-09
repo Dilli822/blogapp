@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
 // import logoImage from "../img/logo/bloglogo1.jpg"
 // import logoImage from "../img/logo/B-logo.png"
@@ -27,8 +27,6 @@ const AppHeader = () => {
   );
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
-  // console.log(`Bearer ${localStorage.getItem("accessToken")}`);
-  // console.log("acess ", accessToken);
 
   const isLoggedIn = [
     "/profile",
@@ -56,86 +54,81 @@ const AppHeader = () => {
     { key: "about", label: "About Us", path: "/about" },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "http://127.0.0.1:8000/account/api/usersList/",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-          }
-        );
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/account/api/usersList/",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
 
+      const data = await response.json();
+
+      if (data.length > 0) {
+        setUserName(data[0].username);
+        // localStorage.setItem('user_image', imgData.image);
+        localStorage.setItem("user_id", data[0].id);
+        localStorage.setItem("user_name", data[0].username);
+        localStorage.setItem("user_email", data[0].email);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // fetchImageData();
+
+  const fetchTotalBlogsCount = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/blog/api/total-blogs-count/"
+      );
+      if (response.ok) {
         const data = await response.json();
-        // const imgData = await responseImage.json();
-        // console.log(data);
-
-        if (data.length > 0) {
-          setUserName(data[0].username);
-          // localStorage.setItem('user_image', imgData.image);
-          localStorage.setItem("user_id", data[0].id);
-          localStorage.setItem("user_name", data[0].username);
-          localStorage.setItem("user_email", data[0].email);
-        }
-      } catch (error) {
-        console.error(error);
+        setTotalBlogsCount(data.total_blogs_count);
+        localStorage.setItem("total_blogs_count", data.total_blogs_count);
+      } else {
+        console.error("Error fetching total blogs count");
       }
-    };
-    // fetchImageData();
-    fetchData(); // Call the async function when the component mounts
-
-    // cleanup function if needed
-    return () => {
-      // cleanup logic
-    };
-  }, []); // empty dependency array means this effect runs once on mount
-
-  useEffect(() => {
-    const fetchTotalBlogsCount = async () => {
-      try {
-        const response = await fetch(
-          "http://127.0.0.1:8000/blog/api/total-blogs-count/"
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setTotalBlogsCount(data.total_blogs_count);
-          localStorage.setItem("total_blogs_count", data.total_blogs_count);
-        } else {
-          console.error("Error fetching total blogs count");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    fetchTotalBlogsCount();
-  }, []);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const onMenuItemClick = (label, path) => {
     if (label === "Logout") {
       // Display confirmation using window.confirm
-      const confirmed = window.confirm("Are you sure you want to logout?");
-      if (confirmed) {
-        // Handle logout action
-        // used localstorage instead of sesssion for now
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_name");
-        localStorage.removeItem("user_email");
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("user_image");
+      Modal.confirm({
+        title: "Logout",
+        content: "Are you sure you want to logout?",
+        okText: "Yes",
+        cancelText: "No",
+        okType: "danger", // Set OK button color to red
+        onOk() {
+          // Handle logout action
+          // used localstorage instead of session for now
+          localStorage.removeItem("user_id");
+          localStorage.removeItem("user_name");
+          localStorage.removeItem("user_email");
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("user_image");
 
-        // Remove the 'path' property from the 'menuLoggedItems' array
-        const updatedMenuLoggedItems = menuLoggedItems.map((item) => {
-          const { path, ...rest } = item;
-          return rest;
-        });
-        setMenuLoggedItems(updatedMenuLoggedItems);
-        // Redirect to '/'
-        window.location.href = "/";
-      }
+          // Remove the 'path' property from the 'menuLoggedItems' array
+          const updatedMenuLoggedItems = menuLoggedItems.map((item) => {
+            const { path, ...rest } = item;
+            return rest;
+          });
+          setMenuLoggedItems(updatedMenuLoggedItems);
+          // Redirect to '/'
+          window.location.href = "/";
+        },
+        onCancel() {
+          console.log("Cancel logout");
+        },
+      });
     } else {
       // Handle other menu item clicks (e.g., navigation)
       console.log(`Clicked on menu item ${label}`);
@@ -143,6 +136,11 @@ const AppHeader = () => {
       window.location.href = window.location;
     }
   };
+
+  useEffect(() => {
+    fetchData(); // Call the async function when the component mounts
+    fetchTotalBlogsCount();
+  }, []);
 
   return (
     <Header
@@ -157,16 +155,17 @@ const AppHeader = () => {
       }}
     >
       {/* Your Logo Component Here */}
-      <div className="demo-logo" style={{ width: "50%" ,  padding: "2%",}}>
+      <div className="demo-logo" style={{ width: "50%", padding: "2%" }}>
         {/* Add your logo component or image here */}
-        <Link to="/">
         <img
           src={logoImage}
           alt="Logo"
-          style={{ width: "50px", verticalAlign: "middle" }}
-
+          style={{
+            width: "50px",
+            verticalAlign: "middle",
+            borderRadius: "10px",
+          }}
         />
-        </Link>
       </div>
 
       {/* Menu component */}
@@ -202,7 +201,6 @@ const AppHeader = () => {
           style={{
             width: "50%",
             justifyContent: "end",
-            
           }}
           onClick={({ key }) =>
             onMenuItemClick(

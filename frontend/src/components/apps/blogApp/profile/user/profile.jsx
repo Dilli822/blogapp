@@ -15,6 +15,8 @@ import {
   Result,
   Input,
   message,
+  Alert,
+  Spin,
 } from "antd";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
@@ -41,6 +43,8 @@ const UserProfile = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [blogData, setBlogData] = useState([]);
   const [blogList, setBlogList] = useState([]);
@@ -81,13 +85,10 @@ const UserProfile = () => {
       if (response.ok) {
         // Successful deletion
         console.log("User account deleted successfully");
-   
 
         // Redirect to the specified path after successful deletion
         window.location.href = "/";
-      }
-
-       else {
+      } else {
         // Handle error
         console.error("Error deleting user account");
       }
@@ -118,17 +119,18 @@ const UserProfile = () => {
           const data = await response.json();
           setInitLoading(false);
           setBlogList(data);
-          setIsLogged(true)
+          setIsLogged(true);
 
           if (data.length > 0) {
             // console.log(data);
+          } else if (response.status === 401) {
+            setIsLogged(false);
           }
-          else if(response.status === 401){
-            setIsLogged(false)
-          }
-
         } catch (error) {
           console.error(error);
+          setError("Something went wrong! Failed to fetch data");
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchImageData();
@@ -169,16 +171,14 @@ const UserProfile = () => {
 
       const data = await response.json();
       console.log(data);
-      setIsLogged(true)
+      setIsLogged(true);
       console.log(data.image);
       setFirstUserImg({ image: data.image });
 
       if (data.length > 0) {
         localStorage.setItem("user_image", data.image);
-      }
-
-      else if(response.status === 401){
-        setIsLogged(false)
+      } else if (response.status === 401) {
+        setIsLogged(false);
       }
     } catch (error) {
       console.error(error);
@@ -219,8 +219,6 @@ const UserProfile = () => {
       console.error("Error:", error);
     }
   };
-
-
 
   const updateImage = async () => {
     try {
@@ -292,197 +290,238 @@ const UserProfile = () => {
     handleUserDetailSave();
   }, []);
 
-
-  if (!isLogged) {
-    return <Forbidden />;
-  }
-
   return (
     <>
       <AppHeader />
 
-      <Layout style={{ padding: "0 10%" }}>
-        <br />
+      {isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "calc(100vh - 64px)", // Subtract the height of the header
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      ) : error ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "calc(100vh - 64px)", // Subtract the height of the header
+          }}
+        >
+          <Alert message={error} type="error" />
+        </div>
+      ) : (
+        <div>
+          <Layout style={{ padding: "0 10%" }}>
+            <br />
 
-        <Row>
-          <Col md={10} style={{ margin: "1%" }}>
-            <Card
-              hoverable
-              style={{}}
-              cover={
-                <img
-                  alt="example"
-                  src={firstUserImg?.image || ""}
-                  style={{ padding: "15px" }}
-                />
-              }
-            >
-              {isEdit ? (
-                <>
-                  <label>
-                    <b>Username</b>
-                  </label>
-                  <Input
-                    value={editUsername}
-                    onChange={(e) => setEditUsername(e.target.value)}
-                    style={{
-                      border: "1px solid #000",
-                      minHeight: "35px",
-                      background: "none",
-                    }}
-                    placeholder="Write your blog content here."
-                  />
-                  <label>
-                    <b>Profile Image</b>
-                  </label>
-                  <Input
-                    type="file"
-                    onChange={(e) => handleProfileImageChange(e)}
-                    style={{
-                      border: "1px solid #000",
-                      minHeight: "35px",
-                      background: "none",
-                    }}
-                  />
-                  <div>
-                    <br />
-                  </div>
+            <Row>
+              <Col md={10} style={{ margin: "1%" }}>
+                <Card
+                  hoverable
+                  style={{}}
+                  cover={
+                    <img
+                      alt="example"
+                      src={firstUserImg?.image || ""}
+                      style={{ padding: "15px" }}
+                    />
+                  }
+                >
+                  {isEdit ? (
+                    <>
+                      <label>
+                        <b>Username</b>
+                      </label>
+                      <Input
+                        value={editUsername}
+                        onChange={(e) => setEditUsername(e.target.value)}
+                        style={{
+                          border: "1px solid #000",
+                          minHeight: "35px",
+                          background: "none",
+                        }}
+                        placeholder="Write your blog content here."
+                      />
+                      <label>
+                        <b>Profile Image</b>
+                      </label>
+                      <Input
+                        type="file"
+                        onChange={(e) => handleProfileImageChange(e)}
+                        style={{
+                          border: "1px solid #000",
+                          minHeight: "35px",
+                          background: "none",
+                        }}
+                      />
+                      <div>
+                        <br />
+                      </div>
+                      <Button
+                        icon={<CloseOutlined />}
+                        onClick={handleUserDetailCancel}
+                      >
+                        Cancel
+                      </Button>
+                      &nbsp; &nbsp;
+                      <Button
+                        icon={<SaveOutlined />}
+                        onClick={handleUserDetailSave}
+                      >
+                        Save
+                      </Button>
+                      <br />
+                    </>
+                  ) : (
+                    <Meta
+                      title={localStorage.getItem("user_name") || "username"}
+                      description={
+                        <>
+                          <p>
+                            <strong>Email:</strong>{" "}
+                            {localStorage.getItem("user_email")}
+                          </p>
+                        </>
+                      }
+                    />
+                  )}
+                  <br />
                   <Button
-                    icon={<CloseOutlined />}
-                    onClick={handleUserDetailCancel}
+                    icon={<EditOutlined />}
+                    onClick={handleUserDetailEdit}
                   >
-                    Cancel
+                    Edit
                   </Button>
                   &nbsp; &nbsp;
-                  <Button
-                    icon={<SaveOutlined />}
-                    onClick={handleUserDetailSave}
-                  >
-                    Save
+                  <Button danger icon={<DeleteOutlined />} onClick={showModal}>
+                    Delete Account
                   </Button>
-                  <br />
-                </>
-              ) : (
-                <Meta
-                  title={localStorage.getItem("user_name") || "username"}
-                  description={
-                    <>
-                      <p>
-                        <strong>Email:</strong>{" "}
-                        {localStorage.getItem("user_email")}
-                      </p>
-                    </>
-                  }
-                />
-              )}
-              <br />
-              <Button icon={<EditOutlined />} onClick={handleUserDetailEdit}>
-                Edit
-              </Button>
-              &nbsp; &nbsp;
-              <Button danger icon={<DeleteOutlined />} onClick={showModal}>
-                Delete Account
-              </Button>
-              {isEdit ? <div></div> : <div></div>}
-              <Modal
-                title="Confirm Delete"
-                visible={isDeleteModalVisible}
-                onOk={handleDeleteOk}
-                onCancel={handleDeleteCancel}
-                okText="Delete"
-                cancelText="Cancel"
-                okButtonProps={{ danger: true }}
-              >
-                <p>Are you sure you want to delete your account?</p>
-                <p>This action cannot be undone.</p>
-              </Modal>
-            </Card>
-          </Col>
-
-          <Col
-            md={13}
-            xs={24}
-            style={{ background: "#fff", margin: "1%", borderRadius: "8px" }}
-          >
-            <Row gutter={24} style={{ padding: "0 4%", margin: 0 }}>
-              <br />
-
-              <Col md={24} xs={23} style={{ padding: "0 0 3% 0", margin: 0 }}>
-                <h2> Blogs {blogList.length === 0 ? 0 : blogList.length}</h2>
-                {blogList.length === 0 ? (
-                  <Result
-                    status="404"
-                    title="No Blogs Found"
-                    subTitle="You haven't published any blogs yet."
-                  />
-                ) : (
-                  <Row
-                    gutter={24}
-                    style={{ height: "500px", overflow: "auto", margin: "0" }}
+                  {isEdit ? <div></div> : <div></div>}
+                  <Modal
+                    title="Confirm Delete"
+                    visible={isDeleteModalVisible}
+                    onOk={handleDeleteOk}
+                    onCancel={handleDeleteCancel}
+                    okText="Delete"
+                    cancelText="Cancel"
+                    okButtonProps={{ danger: true }}
                   >
-                    {blogList.map((item) => (
-                      <Col
-                        key={item.id}
-                        md={11}
-                        xs={24}
+                    <p>Are you sure you want to delete your account?</p>
+                    <p>This action cannot be undone.</p>
+                  </Modal>
+                </Card>
+              </Col>
+
+              <Col
+                md={13}
+                xs={24}
+                style={{
+                  background: "#fff",
+                  margin: "1%",
+                  borderRadius: "8px",
+                }}
+              >
+                <Row gutter={24} style={{ padding: "0 4%", margin: 0 }}>
+                  <br />
+
+                  <Col
+                    md={24}
+                    xs={23}
+                    style={{ padding: "0 0 3% 0", margin: 0 }}
+                  >
+                    <h2>
+                      {" "}
+                      Blogs {blogList.length === 0 ? 0 : blogList.length}
+                    </h2>
+                    {blogList.length === 0 ? (
+                      <Result
+                        status="404"
+                        title="No Blogs Found"
+                        subTitle="You haven't published any blogs yet."
+                      />
+                    ) : (
+                      <Row
+                        gutter={24}
                         style={{
-                          height: "150px",
-                          overflow: "hidden",
-                          border: "1px solid #d9d9d9",
-                          borderRadius: "5px",
-                          margin: "1%",
-                          padding: "2%",
-                          boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);",
+                          height: "500px",
+                          overflow: "auto",
+                          margin: "0",
                         }}
                       >
-                        <div style={{ textAlign: "left" }}>
-                          <img
-                            src={item.image}
-                            alt="Blog"
+                        {blogList.map((item) => (
+                          <Col
+                            key={item.id}
+                            md={11}
+                            xs={24}
                             style={{
-                              width: "50px",
-                              height: "auto",
-                              marginBottom: 8,
-                            }}
-                          />
-                        </div>
-                        <div style={{ textAlign: "left" }}>
-                          &nbsp;
-                          <Link
-                            to={`/details/${item.id}`}
-                            style={{
-                              fontWeight: "normal",
-                              alignItems: "start",
-                              color: "#000",
+                              height: "150px",
+                              overflow: "hidden",
+                              border: "1px solid #d9d9d9",
+                              borderRadius: "5px",
+                              margin: "1%",
+                              padding: "2%",
+                              boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);",
                             }}
                           >
-                            {item.title}
-                          </Link>
-                        </div>
-                        <div style={{ color: "#888", marginTop: 4 }}>
-                          {item.description}
-                        </div>
-                        <div style={{ marginTop: 8 }}>
-                          <Link to={`/blogs`}>View Blogs</Link>
-                        </div>
-                      </Col>
-                    ))}
-                  </Row>
-                )}
+                            <div style={{ textAlign: "left" }}>
+                              <img
+                                src={item.image}
+                                alt="Blog"
+                                style={{
+                                  width: "50px",
+                                  height: "auto",
+                                  marginBottom: 8,
+                                }}
+                              />
+                            </div>
+                            <div style={{ textAlign: "left" }}>
+                              &nbsp;
+                              <Link
+                                to={`/details/${item.id}`}
+                                style={{
+                                  fontWeight: "normal",
+                                  alignItems: "start",
+                                  color: "#000",
+                                }}
+                              >
+                                {item.title}
+                              </Link>
+                            </div>
+                            <div style={{ color: "#888", marginTop: 4 }}>
+                              {item.description}
+                            </div>
+                            <div style={{ marginTop: 8 }}>
+                              <Link to={`/blogs`}>View Blogs</Link>
+                            </div>
+                          </Col>
+                        ))}
+                      </Row>
+                    )}
 
-                {blogList.length > 0 && (
-                  <div style={{ textAlign: "center", marginTop: "1%" }}>
-                    <hr />
-                    <Button onClick={() => (window.location.href = "/blogs")}>
-                      View More
-                    </Button>
-                  </div>
-                )}
+                    {blogList.length > 0 && (
+                      <div style={{ textAlign: "center", marginTop: "1%" }}>
+                        <hr />
+                        <Button
+                          onClick={() => (window.location.href = "/blogs")}
+                        >
+                          View More
+                        </Button>
+                      </div>
+                    )}
+                  </Col>
+                </Row>
               </Col>
             </Row>
-          </Col>
-        </Row>
-      </Layout>
+          </Layout>
+        </div>
+      )}
 
       <AppFooter />
     </>

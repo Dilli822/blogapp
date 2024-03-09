@@ -17,7 +17,7 @@ const Details = () => {
     const fetchBlogDetails = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/blog/api/blog-details/${id}/`
+          `http://127.0.0.1:8000/blog/api/blog-detils/${id}/`
         );
 
         if (!response.ok) {
@@ -25,7 +25,7 @@ const Details = () => {
             "Error fetching blog details. HTTP Status:",
             response.status
           );
-          setError("Failed to fetch blog details");
+          setError("Something Went Wrong! Failed to fetch blog details");
           return;
         }
 
@@ -38,7 +38,7 @@ const Details = () => {
         setDetails(mappedDetails);
       } catch (error) {
         console.error("Error fetching blog details:", error);
-        setError("Failed to fetch blog details");
+        setError("Something Went Wrong! Failed to fetch blog details");
       } finally {
         setLoading(false);
       }
