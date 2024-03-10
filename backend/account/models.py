@@ -32,6 +32,11 @@ class UserDetails(models.Model):
     phone_number = models.CharField(max_length=15)
     bio = models.TextField()
     image = models.ImageField(upload_to='user_images/', null=True, blank=True)
+    
+    
+    password_reset_token = models.CharField(max_length=100, blank=True, null=True)
+    password_reset_token_generated_time = models.DateTimeField(blank=True, null=True) 
+    password_reset_token_expire = models.DateTimeField(blank=True, null=True)
 
     @property
     def total_blogs(self):
@@ -50,6 +55,10 @@ class UserData(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    
+    
+
+
     
     objects = UserManager()
     

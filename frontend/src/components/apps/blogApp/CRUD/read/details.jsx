@@ -17,28 +17,19 @@ const Details = () => {
     const fetchBlogDetails = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/blog/api/blog-detils/${id}/`
+          `http://127.0.0.1:8000/blog/api/blog-details/${id}/`
         );
 
         if (!response.ok) {
-          console.error(
-            "Error fetching blog details. HTTP Status:",
-            response.status
-          );
-          setError("Something Went Wrong! Failed to fetch blog details");
-          return;
+          throw new Error(`Failed to fetch blog details. HTTP Status: ${response.status}`);
         }
 
         const resultItems = await response.json();
-
-        console.log(resultItems);
-        // Exclude user_id from details
         const { user_id, ...mappedDetails } = resultItems;
-
         setDetails(mappedDetails);
       } catch (error) {
         console.error("Error fetching blog details:", error);
-        setError("Something Went Wrong! Failed to fetch blog details");
+        setError("Failed to fetch blog details. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -87,16 +78,13 @@ const Details = () => {
 
                   <br />
 
-                  {/* Render other details as needed */}
                   <Text size="large" style={{ fontSize: "21px" }}>
-                    {details.description
-                      .split("\r\n")
-                      .map((paragraph, index) => (
-                        <React.Fragment key={index}>
-                          {paragraph}
-                          <br />
-                        </React.Fragment>
-                      ))}
+                    {details.description.split("\r\n").map((paragraph, index) => (
+                      <React.Fragment key={index}>
+                        {paragraph}
+                        <br />
+                      </React.Fragment>
+                    ))}
                   </Text>
                 </Col>
               </Row>

@@ -6,7 +6,9 @@ from rest_framework.generics import RetrieveAPIView, ListCreateAPIView, Retrieve
 from .models import UserData, UserDetails
 from .serializers import UserSerializer, UserDetailsSerializer, UserUpdateSerializer
 from django.shortcuts import get_object_or_404
-
+from rest_framework import status
+from account.utils import send_email_view, send_mail
+from django.utils import timezone
 
 class RegisterView(APIView):
     def post(self, request):
@@ -83,3 +85,47 @@ class UserDetailsRetrieveUpdateView(RetrieveUpdateAPIView):
         self.perform_update(serializer)
 
         return Response(serializer.data)
+    
+    
+    
+class EmailCheckAPIView(APIView):
+    def post(self, request):
+        email = request.data.get('email', None)
+        if not email:
+            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the email exists in the database
+        if UserData.objects.filter(email=email).exists():
+            # Email exists in the database
+            send_email_view(request, email)  # Call the send_email_view function with the email argument
+            return Response({"message": "You will receive an email shortly."}, status=status.HTTP_200_OK)
+        else:
+            # Email does not exist in the database
+            return Response({"message": "Email not found in the database."}, status=status.HTTP_404_NOT_FOUND)
+
+class PasswordUpdateAPIView(APIView):
+    def post(self, request):
+        token = request.data.get('token', None)
+        new_password = request.data.get('new_password', None)
+
+        # Check if token and new password are provided
+        if not token or not new_password:
+            return Response({"error": "Token and new password are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Get UserDetails object for the given token
+        try:
+            user_details = UserDetails.objects.get(password_reset_token=token)
+        except UserDetails.DoesNotExist:
+            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the token is expired
+        if user_details.password_reset_token_expire < timezone.now():
+            return Response({"error": "Token has expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Update user's password
+        user = user_details.user
+        user.set_password(new_password)
+        user.save()
+
+        return Response({"message": "Password updated successfully"}, status=status.HTTP_200_OK)
+    

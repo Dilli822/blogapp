@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Typography, Input, Button, Col, message, Upload,  Alert,
-  Spin, } from "antd";
+import {
+  Layout,
+  Typography,
+  Input,
+  Button,
+  Col,
+  message,
+  Upload,
+  Alert,
+  Spin,
+} from "antd";
 import { SaveOutlined, UploadOutlined } from "@ant-design/icons";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
@@ -56,7 +65,7 @@ const Create = () => {
       formData.append("image", imageFile);
     }
 
-    console.log("completed form data ", FormData)
+    console.log("completed form data ", FormData);
 
     fetch("http://127.0.0.1:8000/blog/api/blog-details/", {
       method: "POST",
@@ -138,9 +147,9 @@ const Create = () => {
     }, 2000);
   };
 
-  useEffect(()=>{
-    setIsLoading(false)
-  })
+  useEffect(() => {
+    setIsLoading(false);
+  });
 
   return (
     <>
@@ -169,56 +178,61 @@ const Create = () => {
         </div>
       ) : (
         <div>
+          <Layout style={{ padding: "0 10%" }}>
+            <Col>
+              <Title> Publish/Write Blog</Title>
+              <h2>Title: </h2>
+              <Input
+                placeholder="Enter Blog Title"
+                value={header}
+                onChange={handleHeaderChange}
+                style={{
+                  marginBottom: "16px",
+                  border: "none",
+                  minHeight: "55px",
+                  background: "none",
+                  height: "auto",
+                }}
+              />
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <h3>Upload Picture/Image for your Blog</h3>
+                &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                <Upload {...props}>
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
+              </div>
+              <h3> Description: </h3>
+              <TextArea
+                showCount
+                autoSize={{ minRows: 16, maxRows: 1000 }}
+                minHeight={500}
+                onChange={handleParagraphChange}
+                placeholder="Write your blog content here."
+                value={paragraph}
+                style={{
+                  border: "1px solid #dbd9ee",
+                  background: "none",
+                  height: "auto",
+                }}
+              />
+            </Col>
 
-      <Layout style={{ padding: "0 10%" }}>
-        <Col>
-          <Title> Publish/Write Blog</Title>
-          <h2>Title: </h2>
-          <Input
-            placeholder="Enter Blog Title"
-            value={header}
-            onChange={handleHeaderChange}
-            style={{
-              marginBottom: "16px",
-              border: "none",
-              minHeight: "35px",
-              background: "none",
-            }}
-          />
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <h3>Upload Picture/Image for your Blog</h3>
-            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-            <Upload {...props}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </div>
-          <h3> Description: </h3>
-          <TextArea
-            showCount
-            minHeight={500}
-            onChange={handleParagraphChange}
-            placeholder="Write your blog content here."
-            rows={15}
-            value={paragraph}
-          />
-        </Col>
-
-        <Col>
-          <br />
-          <Button icon={<SaveOutlined />} onClick={handlePostBlog}>
-            Discard Changes
-          </Button>
-          &nbsp;
-          <Button
-            icon={<SaveOutlined />}
-            onClick={handlePostBlog}
-            loading={loading}
-          >
-            Post/Publish Blog
-          </Button>
-        </Col>
-      </Layout>
-      </div>
+            <Col>
+              <br />
+              <Button icon={<SaveOutlined />} onClick={handlePostBlog}>
+                Discard Changes
+              </Button>
+              &nbsp;
+              <Button
+                icon={<SaveOutlined />}
+                onClick={handlePostBlog}
+                loading={loading}
+              >
+                Post/Publish Blog
+              </Button>
+            </Col>
+          </Layout>
+        </div>
       )}
 
       <AppFooter />

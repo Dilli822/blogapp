@@ -13,6 +13,11 @@ urlpatterns = [
     path('api/user/delete/<int:pk>/', UserDeleteAPIView.as_view(), name='user-delete'),  #delete the whole username account
     
     
-    path('api/userdetails/', UserDetailsRetrieveUpdateView.as_view(), name='user_details_retrieve_update') # read and update the userdetails 
+    path('api/userdetails/', UserDetailsRetrieveUpdateView.as_view(), name='user_details_retrieve_update'), # read and update the userdetails 
+    
+    
+    # password-reset
+    path('password-reset-email/', EmailCheckAPIView.as_view(), name='send_email'),
+    path('update-password/', PasswordUpdateAPIView.as_view(), name='password_update'),
     
 ] 

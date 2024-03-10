@@ -12,6 +12,7 @@ import {
   message,
   Alert,
   Spin,
+  Row,
 } from "antd";
 import {
   EditOutlined,
@@ -307,7 +308,7 @@ const BlogList = () => {
                   <div
                     style={{
                       display: "block",
-                      height: "150px",
+                      height: "200px",
                       overflow: "hidden",
                     }}
                   >
@@ -316,7 +317,7 @@ const BlogList = () => {
                       src={item.image}
                       alt=""
                       srcset=""
-                      style={{ width: "50px" }}
+                      style={{ width: "100px" }}
                     />
                     <h2> {item.title}</h2>
                     <p> {item.description} </p>
@@ -331,9 +332,11 @@ const BlogList = () => {
             visible={editModalVisible}
             onCancel={() => setEditModalVisible(false)}
             footer={null} // No footer for simplicity, you can customize it
+            width={{ xs: '100%', sm: '100%', md: '100%', lg: '100%', xl: '100%' }} // Responsive width
           >
-            <Layout style={{ padding: "3%" }}>
-              <Col>
+            <Layout style={{ padding: "2%" }}>
+              <Row> 
+              <Col  xs={24} sm={24} md={24} lg={24} xl={24}>
                 <h3>Title: </h3>
                 <Input
                   placeholder="Enter Blog Title"
@@ -383,6 +386,7 @@ const BlogList = () => {
                   Save/Publish Changes
                 </Button>
               </Col>
+              </Row>
             </Layout>
           </Modal>
         </div>
