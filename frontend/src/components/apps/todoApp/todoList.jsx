@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Input, Button, List, Modal, Form, Typography, Checkbox } from "antd";
+import {
+  Layout,
+  Input,
+  Button,
+  List,
+  Modal,
+  Form,
+  Typography,
+  Checkbox,
+} from "antd";
+
+import AppHeader from "../../apps/blogApp/header/header";
+import AppFooter from "../../apps/blogApp/footer/footer";
+
 const { Header, Content } = Layout;
 const { Title } = Typography;
 const TodoList = () => {
@@ -78,54 +91,82 @@ const TodoList = () => {
   };
 
   return (
-    <Layout style={{ padding: "0 15%"}}>
-   
+    <>
+      {" "}
+      <AppHeader />
+      <Layout style={{ padding: "0 15%", minHeight: "75vh" }}>
         <Title level={1}>Todo List</Title>
-     
-      
 
-      <Content style={{ padding: "20px"}}>
-        <Input placeholder="Enter a new task" value={newTask} onChange={(e) => setNewTask(e.target.value)} />
-        <Button type="primary" ghost onClick={handleAddTask} style={{ marginTop: "10px" , minWidth: "6rem"}}>
-          Add Task
-        </Button>
-        <List
-          style={{ marginTop: "20px" }}
-          bordered
-          dataSource={tasks}
-          renderItem={(task, index) => (
-            <List.Item
-              style={{ textDecoration: task.completed ? "line-through" : "none" }}
-              actions={[
-                <Button type="primary" onClick={() => handleUpdateTask(task)}>
-                  Update
-                </Button>,
-                <Button danger onClick={() => handleRemoveTask(task.id)}>
-                  Remove
-                </Button>,
-              ]}
-            >
-           
-              <Checkbox checked={task.completed} onChange={() => handleCheckboxChange(task.id)}>
-                {`${index + 1}. ${task.text}`}
-              </Checkbox>
-            </List.Item>
-          )}
-        />
+        <Content style={{ padding: "20px" }}>
+          <Input
+            placeholder="Enter a new task"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+          />
+          <Button
+            type="primary"
+            ghost
+            onClick={handleAddTask}
+            style={{ marginTop: "10px", minWidth: "6rem" }}
+          >
+            Add Task
+          </Button>
+          <List
+            style={{ marginTop: "20px" }}
+            bordered
+            dataSource={tasks}
+            renderItem={(task, index) => (
+              <List.Item
+                style={{
+                  textDecoration: task.completed ? "line-through" : "none",
+                }}
+                actions={[
+                  <Button type="primary" onClick={() => handleUpdateTask(task)}>
+                    Update
+                  </Button>,
+                  <Button danger onClick={() => handleRemoveTask(task.id)}>
+                    Remove
+                  </Button>,
+                ]}
+              >
+                <Checkbox
+                  checked={task.completed}
+                  onChange={() => handleCheckboxChange(task.id)}
+                >
+                  {`${index + 1}. ${task.text}`}
+                </Checkbox>
+              </List.Item>
+            )}
+          />
 
-        <Modal title="Edit Task" visible={isEditModalVisible} onOk={handleEditTask} onCancel={handleEditModalCancel}>
-          <Form>
-            <Form.Item label="Task">
-              <Input value={editInput} onChange={(e) => setEditInput(e.target.value)} />
-            </Form.Item>
-          </Form>
-        </Modal>
+          <Modal
+            title="Edit Task"
+            visible={isEditModalVisible}
+            onOk={handleEditTask}
+            onCancel={handleEditModalCancel}
+          >
+            <Form>
+              <Form.Item label="Task">
+                <Input
+                  value={editInput}
+                  onChange={(e) => setEditInput(e.target.value)}
+                />
+              </Form.Item>
+            </Form>
+          </Modal>
 
-        <Modal title="Confirm Deletion" visible={isDeleteModalVisible} onOk={handleDeleteConfirm} onCancel={handleDeleteCancel}>
-          <p>Are you sure you want to delete this task?</p>
-        </Modal>
-      </Content>
-    </Layout>
+          <Modal
+            title="Confirm Deletion"
+            visible={isDeleteModalVisible}
+            onOk={handleDeleteConfirm}
+            onCancel={handleDeleteCancel}
+          >
+            <p>Are you sure you want to delete this task?</p>
+          </Modal>
+        </Content>
+      </Layout>
+      <AppFooter />
+    </>
   );
 };
 

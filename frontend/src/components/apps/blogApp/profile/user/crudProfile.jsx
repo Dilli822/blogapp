@@ -160,11 +160,6 @@ const UserProfile = () => {
     }
   };
 
-  const handleProfileImageChange = (e) => {
-    const file = e.target.files[0];
-    setEditImage(file);
-  };
-
   const handleUserDetailEdit = () => {
     setIsEdit(true);
   };
@@ -280,8 +275,6 @@ const UserProfile = () => {
     }
   };
 
-
-  // SAVE BUTTON FOR EDIT 
   const handleUserDetailSave = async () => {
     // Check if there are changes in the username
     if (editUsername !== localStorage.getItem("user_name")) {
@@ -304,6 +297,10 @@ const UserProfile = () => {
     setIsEdit(false);
   };
 
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    setEditImage(file);
+  };
 
   // Trigger the image update when editImage changes
   useEffect(() => {

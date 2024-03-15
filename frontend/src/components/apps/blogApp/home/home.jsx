@@ -164,7 +164,7 @@ const Home = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "calc(100vh - 64px)", // Subtract the height of the header
+                height: "calc(100vh - 400px)", // Subtract the height of the header
               }}
             >
               <Alert message={error} type="error" />

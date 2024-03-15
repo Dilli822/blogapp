@@ -28,9 +28,9 @@ class UserManager(BaseUserManager):
 
 class UserDetails(models.Model):
     user = models.OneToOneField('UserData', on_delete=models.CASCADE, related_name='user_details')
-    address = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=15)
-    bio = models.TextField()
+    address = models.CharField(max_length=255, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+    bio = models.TextField( blank=True)
     image = models.ImageField(upload_to='user_images/', null=True, blank=True)
     
     
@@ -57,8 +57,6 @@ class UserData(AbstractUser):
     is_superuser = models.BooleanField(default=False)
     
     
-
-
     
     objects = UserManager()
     

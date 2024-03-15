@@ -17,6 +17,7 @@ import NewsFeed from "./components/apps/blogApp/home/newsFeed";
 import PageNotFound from "./components/apps/blogApp/error/error404";
 import AboutUs from "./components/apps/blogApp/about/about_us";
 import PasswordResetPage from "./components/apps/blogApp/auth/password-reset";
+import CRUDProfile from "./components/apps/blogApp/profile/user/crudProfile";
 
 const MainRouter = () => {
   return (
@@ -47,6 +48,7 @@ const MainRouter = () => {
         <Route path="/blogs" element={<BlogList />} />
 
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/profile/update" element={<CRUDProfile/>} />
         <Route path="/blog-app/reset-password/:token/confirm" element={<PasswordResetPage/>} />
       </Routes>
     </Router>
