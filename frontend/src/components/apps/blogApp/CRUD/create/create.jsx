@@ -178,7 +178,7 @@ const Create = () => {
         </div>
       ) : (
         <div>
-          <Layout style={{ padding: "0 10%" }}>
+          <Layout style={{ padding: "0 7%" }}>
             <Col>
               <Title> Publish/Write Blog</Title>
               <h2>Title: </h2>

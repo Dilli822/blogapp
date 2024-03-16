@@ -266,7 +266,7 @@ const BlogList = () => {
         </div>
       ) : (
         <div>
-          <Layout style={{ padding: "0 10%" }}>
+          <Layout style={{ padding: "0 7%" }}>
             <Title>
               {" "}
               Blogs List <hr />
@@ -332,60 +332,66 @@ const BlogList = () => {
             visible={editModalVisible}
             onCancel={() => setEditModalVisible(false)}
             footer={null} // No footer for simplicity, you can customize it
-            width={{ xs: '100%', sm: '100%', md: '100%', lg: '100%', xl: '100%' }} // Responsive width
+            width={{
+              xs: "100%",
+              sm: "100%",
+              md: "100%",
+              lg: "100%",
+              xl: "100%",
+            }} // Responsive width
           >
             <Layout style={{ padding: "2%" }}>
-              <Row> 
-              <Col  xs={24} sm={24} md={24} lg={24} xl={24}>
-                <h3>Title: </h3>
-                <Input
-                  placeholder="Enter Blog Title"
-                  value={editHeader}
-                  onChange={handleEditHeaderChange}
-                  style={{
-                    marginBottom: "auto",
-                    border: "none",
-                    background: "none",
-                  }}
-                />
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <h3>Upload Picture/Image for your Blog</h3>
-                  &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-                  <Upload
-                    beforeUpload={() => false} // Prevent default upload behavior
-                    onChange={(info) => handleEditImageChange(info.file)}
-                  >
-                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                  </Upload>
-                </div>
-                <h3> Description: </h3>
-                <TextArea
-                  showCount
-                  minHeight={500}
-                  onChange={handleEditParagraphChange}
-                  placeholder="Write your blog content here."
-                  rows={15}
-                  value={editParagraph}
-                />
-              </Col>
+              <Row>
+                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                  <h3>Title: </h3>
+                  <Input
+                    placeholder="Enter Blog Title"
+                    value={editHeader}
+                    onChange={handleEditHeaderChange}
+                    style={{
+                      marginBottom: "auto",
+                      border: "none",
+                      background: "none",
+                    }}
+                  />
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <h3>Upload Picture/Image for your Blog</h3>
+                    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Upload
+                      beforeUpload={() => false} // Prevent default upload behavior
+                      onChange={(info) => handleEditImageChange(info.file)}
+                    >
+                      <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    </Upload>
+                  </div>
+                  <h3> Description: </h3>
+                  <TextArea
+                    showCount
+                    minHeight={500}
+                    onChange={handleEditParagraphChange}
+                    placeholder="Write your blog content here."
+                    rows={15}
+                    value={editParagraph}
+                  />
+                </Col>
 
-              <Col>
-                <br />
-                <Button
-                  icon={<DeleteRowOutlined />}
-                  onClick={() => setEditModalVisible(false)}
-                >
-                  Discard Changes
-                </Button>
-                &nbsp;
-                <Button
-                  icon={<SaveOutlined />}
-                  onClick={submitEditChange}
-                  loading={editLoading}
-                >
-                  Save/Publish Changes
-                </Button>
-              </Col>
+                <Col>
+                  <br />
+                  <Button
+                    icon={<DeleteRowOutlined />}
+                    onClick={() => setEditModalVisible(false)}
+                  >
+                    Discard Changes
+                  </Button>
+                  &nbsp;
+                  <Button
+                    icon={<SaveOutlined />}
+                    onClick={submitEditChange}
+                    loading={editLoading}
+                  >
+                    Save/Publish Changes
+                  </Button>
+                </Col>
               </Row>
             </Layout>
           </Modal>

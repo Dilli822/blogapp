@@ -52,7 +52,7 @@ const PublicBlogDetails = () => {
     <>
       <AppHeader />
       {/* Content inside Layout with 10% padding */}
-      <Content style={{ padding: "0 15%" }}>
+      <Content style={{ padding: "0 7%" }}>
         <Row>
           <Col span={24}>
             <Title>{details.title}</Title>
@@ -70,7 +70,7 @@ const PublicBlogDetails = () => {
             <br />
 
             {/* Render other details as needed */}
-            <Text size="large" style={{ fontSize: "21px" }}>
+            <Text size="large" style={{ fontSize: "19px" }}>
               {details.description.split("\r\n").map((paragraph, index) => (
                 <React.Fragment key={index}>
                   {paragraph}

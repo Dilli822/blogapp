@@ -41,3 +41,13 @@
 input:focus, textarea:focus, select:focus{
   outline: none!important;
 }
+
+.main-layout{
+  padding: 0 8%;
+}
+
+@media (max-width: 767px) {
+  .main-layout{
+    padding: 0 5%;
+  }
+}

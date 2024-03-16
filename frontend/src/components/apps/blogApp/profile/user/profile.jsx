@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   Layout,
-  Space,
   Col,
   Row,
   Card,
   Button,
-  List,
-  Skeleton,
-  Avatar,
-  Collapse,
-  Divider,
   Modal,
   Result,
   Input,
@@ -21,17 +15,10 @@ import {
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
 import { Link } from "react-router-dom";
-import Forbidden from "../../error/unathorizedAccess";
 
 import {
   EditOutlined,
   CloseOutlined,
-  SearchOutlined,
-  FacebookOutlined,
-  TwitterOutlined,
-  InstagramOutlined,
-  GithubOutlined,
-  LinkedinOutlined,
   SaveOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
@@ -57,15 +44,15 @@ const UserProfile = () => {
   const [userFullDetails, setUserFullDetails] = useState();
   const [isEdit, setIsEdit] = useState(false);
   const [editUsername, setEditUsername] = useState(
-    localStorage.getItem("user_name") || "username"
+    localStorage.getItem("user_name")
   );
   const [editAddress, setEditAddress] = useState(
-    localStorage.getItem("address") || "address"
+    localStorage.getItem("address")
   );
 
-  const [editBio, setEditBio] = useState(localStorage.getItem("bio") || "bio");
+  const [editBio, setEditBio] = useState(localStorage.getItem("bio"));
   const [editPhoneNumber, setEditPhoneNumber] = useState(
-    localStorage.getItem("phone_number") || "phone_number"
+    localStorage.getItem("phone_number")
   );
   const [address, setAddress] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
@@ -160,9 +147,19 @@ const UserProfile = () => {
     }
   };
 
+  const [editNewImage, setEditNewImage] = useState(null);
+
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
+    setEditNewImage(file);
     setEditImage(file);
+
+    // Update the img src immediately after selecting the image
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      document.getElementById("profile-image").src = event.target.result;
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleUserDetailEdit = () => {
@@ -197,9 +194,11 @@ const UserProfile = () => {
       setBio(data.bio);
       setAddress(data.address);
       setPhoneNumber(data.phone_number);
-
+      localStorage.setItem("user_image", data.image);
+      localStorage.setItem("address", data.address);
+      localStorage.setItem("phone_number", data.phone_number);
+      localStorage.setItem("bio", data.bio);
       if (data.length > 0) {
-        localStorage.setItem("user_image", data.image);
       } else if (response.status === 401) {
         setIsLogged(false);
       }
@@ -271,6 +270,9 @@ const UserProfile = () => {
 
         // Save the updated username in localStorage
         localStorage.setItem("user_name", editUsername);
+        localStorage.setItem("phone_number", editPhoneNumber);
+        localStorage.setItem("address", editAddress);
+        localStorage.setItem("bio", editBio);
       } else {
         // Handle error
         console.error("Error updating username");
@@ -280,8 +282,7 @@ const UserProfile = () => {
     }
   };
 
-
-  // SAVE BUTTON FOR EDIT 
+  // SAVE BUTTON FOR EDIT
   const handleUserDetailSave = async () => {
     // Check if there are changes in the username
     if (editUsername !== localStorage.getItem("user_name")) {
@@ -303,7 +304,6 @@ const UserProfile = () => {
     // Set isEdit to false after saving
     setIsEdit(false);
   };
-
 
   // Trigger the image update when editImage changes
   useEffect(() => {
@@ -385,7 +385,7 @@ const UserProfile = () => {
         </div>
       ) : (
         <div>
-          <Layout style={{ padding: "0 10%" }}>
+          <Layout style={{ padding: "0 7%" }}>
             <br />
 
             <Row>
@@ -432,6 +432,13 @@ const UserProfile = () => {
                       <label>
                         <b>Profile Image</b>
                       </label>
+                      <img
+                        id="profile-image" // Added id to the img tag for easy reference
+                        src={localStorage.getItem("user_image")}
+                        alt=""
+                        style={{ maxWidth: "100%" }}
+                      />
+                      <br />
                       <Input
                         type="file"
                         onChange={(e) => handleProfileImageChange(e)}
@@ -496,15 +503,17 @@ const UserProfile = () => {
                           </p>
 
                           <p>
-                            <strong>bio: </strong> {bio}
+                            <strong>bio: </strong> {localStorage.getItem("bio")}
                           </p>
 
                           <p>
-                            <strong>address: </strong> {address}
+                            <strong>address: </strong>{" "}
+                            {localStorage.getItem("address")}
                           </p>
 
                           <p>
-                            <strong>Contact: </strong> {phone_number}
+                            <strong>Contact: </strong>{" "}
+                            {localStorage.getItem("phone_number")}
                           </p>
                         </>
                       }
@@ -568,7 +577,7 @@ const UserProfile = () => {
                       <Row
                         gutter={24}
                         style={{
-                          height: "500px",
+                          height: "auto",
                           overflow: "auto",
                           margin: "0",
                         }}
@@ -576,7 +585,7 @@ const UserProfile = () => {
                         {blogList.map((item) => (
                           <Col
                             key={item.id}
-                            md={11}
+                            md={23}
                             xs={24}
                             style={{
                               height: "150px",

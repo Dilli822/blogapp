@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import AppHeader from "../header/header";
 import AppFooter from "../footer/footer";
-import ServerDown from "../error/serverDown";
 import Forbidden from "../error/unathorizedAccess";
 import {
   Card,
@@ -44,7 +43,6 @@ const NewsFeed = () => {
   const [notFound, setNotFound] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const currentDate = new Date().toLocaleDateString();
-
   const options = { day: "numeric", month: "short", year: "numeric" };
   const formattedDate = new Date(currentDate).toLocaleDateString(
     undefined,
@@ -182,10 +180,9 @@ const NewsFeed = () => {
     <>
       <AppHeader></AppHeader>
 
-      <Layout style={{ padding: "0 10%" }}>
+      <Layout style={{ padding: "0 7%" }}>
         <>
           <br />
-
           <h1 style={{ textAlign: "left" }}> Blog & Articles </h1>
 
           <Row gutter={24} style={{}}>
@@ -358,7 +355,6 @@ const NewsFeed = () => {
         <br />
         <br />
       </Layout>
-
       <AppFooter />
     </>
   );

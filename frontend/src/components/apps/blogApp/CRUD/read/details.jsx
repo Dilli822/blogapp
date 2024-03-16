@@ -21,7 +21,9 @@ const Details = () => {
         );
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch blog details. HTTP Status: ${response.status}`);
+          throw new Error(
+            `Failed to fetch blog details. HTTP Status: ${response.status}`
+          );
         }
 
         const resultItems = await response.json();
@@ -55,7 +57,7 @@ const Details = () => {
           <Alert message={error} type="error" />
         ) : (
           <>
-            <Content style={{ padding: "0 15%" }}>
+            <Content className="main-layout">
               <Row>
                 <Col span={24}>
                   <Title>{details.title}</Title>
@@ -78,13 +80,15 @@ const Details = () => {
 
                   <br />
 
-                  <Text size="large" style={{ fontSize: "21px" }}>
-                    {details.description.split("\r\n").map((paragraph, index) => (
-                      <React.Fragment key={index}>
-                        {paragraph}
-                        <br />
-                      </React.Fragment>
-                    ))}
+                  <Text size="large" style={{ fontSize: "18px" }}>
+                    {details.description
+                      .split("\r\n")
+                      .map((paragraph, index) => (
+                        <React.Fragment key={index}>
+                          {paragraph}
+                          <br />
+                        </React.Fragment>
+                      ))}
                   </Text>
                 </Col>
               </Row>

@@ -115,6 +115,9 @@ const AppHeader = () => {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("user_image");
+          localStorage.removeItem("address");
+          localStorage.removeItem("phone_number");
+          localStorage.removeItem("bio");
 
           // Remove the 'path' property from the 'menuLoggedItems' array
           const updatedMenuLoggedItems = menuLoggedItems.map((item) => {
@@ -158,16 +161,16 @@ const AppHeader = () => {
       <div className="demo-logo" style={{ width: "50%", padding: "2%" }}>
         {/* Add your logo component or image here */}
         <Link to={"/feed"}>
-        <img
-          src={logoImage}
-          alt="Logo"
-          style={{
-            width: "50px",
-            verticalAlign: "middle",
-            borderRadius: "10px",
-          }}
-        />
-         </Link>
+          <img
+            src={logoImage}
+            alt="Logo"
+            style={{
+              width: "50px",
+              verticalAlign: "middle",
+              borderRadius: "10px",
+            }}
+          />
+        </Link>
       </div>
 
       {/* Menu component */}
