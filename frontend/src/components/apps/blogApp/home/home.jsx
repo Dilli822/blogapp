@@ -143,7 +143,7 @@ const Home = () => {
       <div>
         <AppHeader></AppHeader>
 
-        <Layout style={{ padding: "0 7%", minHeight: "80vh" }}>
+        <Layout className="ant-container " style={{ minHeight: "80vh" }}>
           <br />
 
           {isLoading ? (

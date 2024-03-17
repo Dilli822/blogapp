@@ -180,7 +180,7 @@ const NewsFeed = () => {
     <>
       <AppHeader></AppHeader>
 
-      <Layout style={{ padding: "0 7%" }}>
+      <Layout className="ant-container " >
         <>
           <br />
           <h1 style={{ textAlign: "left" }}> Blog & Articles </h1>

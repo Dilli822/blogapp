@@ -52,7 +52,7 @@ const PublicBlogDetails = () => {
     <>
       <AppHeader />
       {/* Content inside Layout with 10% padding */}
-      <Content style={{ padding: "0 7%" }}>
+      <Content  className="ant-container">
         <Row>
           <Col span={24}>
             <Title>{details.title}</Title>

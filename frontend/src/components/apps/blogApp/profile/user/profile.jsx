@@ -385,7 +385,7 @@ const UserProfile = () => {
         </div>
       ) : (
         <div>
-          <Layout style={{ padding: "0 7%" }}>
+          <Layout  className="ant-container">
             <br />
 
             <Row>

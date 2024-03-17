@@ -57,7 +57,7 @@ const Details = () => {
           <Alert message={error} type="error" />
         ) : (
           <>
-            <Content className="main-layout">
+            <Content  className="ant-container">
               <Row>
                 <Col span={24}>
                   <Title>{details.title}</Title>

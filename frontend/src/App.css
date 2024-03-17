@@ -42,12 +42,35 @@ input:focus, textarea:focus, select:focus{
   outline: none!important;
 }
 
-.main-layout{
-  padding: 0 8%;
+/* Override Ant Design container styles to resemble Bootstrap */
+.ant-container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-@media (max-width: 767px) {
-  .main-layout{
-    padding: 0 5%;
+/* Media queries for responsiveness */
+@media (min-width: 576px) {
+  .ant-container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .ant-container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .ant-container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ant-container {
+    max-width: 1140px;
   }
 }

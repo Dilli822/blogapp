@@ -266,7 +266,7 @@ const BlogList = () => {
         </div>
       ) : (
         <div>
-          <Layout style={{ padding: "0 7%" }}>
+          <Layout  className="ant-container">
             <Title>
               {" "}
               Blogs List <hr />

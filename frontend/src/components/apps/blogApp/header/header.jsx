@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Modal } from "antd";
+import { Layout, Menu, Modal,Row, Col } from "antd";
 import { Link } from "react-router-dom";
 // import logoImage from "../img/logo/bloglogo1.jpg"
 // import logoImage from "../img/logo/B-logo.png"
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import logoImage from "../img/logo/blogCofffee.jpg";
 
 const { Header } = Layout;
+const { Content } = Layout;
 
 const AppHeader = () => {
   const [userBasicData, setUserBasicData] = useState([]);
@@ -146,20 +147,26 @@ const AppHeader = () => {
   }, []);
 
   return (
+<>
+
     <Header
       style={{
         position: "sticky",
         top: 0,
         zIndex: 999,
         width: "100%",
-        display: "flex",
-        alignItems: "center",
+        // display: "flex",
+        // alignItems: "center",
         padding: "5px 0",
       }}
     >
-      {/* Your Logo Component Here */}
-      <div className="demo-logo" style={{ width: "50%", padding: "2%" }}>
-        {/* Add your logo component or image here */}
+
+      <div className="ant-container " style={{ display: "flex"}}>
+        
+            {/*  Logo Component Here */}
+  
+  <div style={{ width: "50%"}}>
+
         <Link to={"/feed"}>
           <img
             src={logoImage}
@@ -171,16 +178,18 @@ const AppHeader = () => {
             }}
           />
         </Link>
-      </div>
+       </div>
 
-      {/* Menu component */}
+      <div style={{ width: "50%"}}>
+        {/* Menu component */}
       {isLoggedIn ? (
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["nav2"]}
           style={{
-            width: "50%",
+            // width: "50%",
+            display: "flex",
             justifyContent: "end",
           }}
           onClick={({ key }) =>
@@ -204,7 +213,7 @@ const AppHeader = () => {
           mode="horizontal"
           defaultSelectedKeys={["nav2"]}
           style={{
-            width: "50%",
+            display: "flex",
             justifyContent: "end",
           }}
           onClick={({ key }) =>
@@ -224,7 +233,16 @@ const AppHeader = () => {
           ))}
         </Menu>
       )}
+      </div>
+        </div>
+
+ 
+    
+  
+      
+
     </Header>
+    </>
   );
 };
 

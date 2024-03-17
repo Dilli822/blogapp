@@ -12,7 +12,7 @@ const AboutUs = () => {
   return (
     <div>
     <AppHeader />
-    <Layout style={{ padding: "24px" }}>
+    <Layout className="ant-container">
      
       <Content style={{ background: "#fff", padding: "24px", minHeight: 280 }}>
         <Row gutter={[16, 16]}>
@@ -41,6 +41,7 @@ const AboutUs = () => {
       </Content>
 
     </Layout>
+    <br></br>
  <AppFooter />
  </div>
   );
