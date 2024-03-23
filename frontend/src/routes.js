@@ -10,6 +10,7 @@ import ForgotPassword from "./components/apps/blogApp/auth/forgot-password";
 import Create from "./components/apps/blogApp/CRUD/create/create";
 import Update from "./components/apps/blogApp/CRUD/update/update";
 import Details from "./components/apps/blogApp/CRUD/read/details";
+import PublicBlogDetails from "./components/apps/blogApp/CRUD/read/public/blogDetails";
 import Delete from "./components/apps/blogApp/CRUD/delete/delete";
 import UserProfile from "./components/apps/blogApp/profile/user/profile";
 import BlogList from "./components/apps/blogApp/CRUD/read/blogList";
@@ -18,6 +19,8 @@ import PageNotFound from "./components/apps/blogApp/error/error404";
 import AboutUs from "./components/apps/blogApp/about/about_us";
 import PasswordResetPage from "./components/apps/blogApp/auth/password-reset";
 import CRUDProfile from "./components/apps/blogApp/profile/user/crudProfile";
+import WeatherForecast from "./components/apps/weather/weatherApp";
+
 
 const MainRouter = () => {
   return (
@@ -38,7 +41,7 @@ const MainRouter = () => {
 
         <Route path="/details/:id" element={<Details />} />
 
-        <Route path="public/blog/details/:id" element={<Details />} />
+        <Route path="public/blog/details/:id" element={<PublicBlogDetails />} />
 
         <Route path="/delete" element={<Details />} />
 
@@ -50,6 +53,8 @@ const MainRouter = () => {
         <Route path="*" element={<PageNotFound />} />
         <Route path="/profile/update" element={<CRUDProfile/>} />
         <Route path="/blog-app/reset-password/:token/confirm" element={<PasswordResetPage/>} />
+        <Route path="/weather-forecast" element={<WeatherForecast/>} />
+        
       </Routes>
     </Router>
   );

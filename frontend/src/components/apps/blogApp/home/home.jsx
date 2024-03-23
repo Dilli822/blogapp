@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AppHeader from "../header/header";
+import AppHeader from "../header/publicHeader";
 import AppFooter from "../footer/footer";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import {
@@ -349,11 +349,10 @@ const Home = () => {
                 gutter={24}
                 style={{
                   background: "#fff",
-                  padding: "2%",
                   alignItems: "center",
                 }}
               >
-                <Col xs={24} md={13} style={{}}>
+                <Col xs={24} md={13} style={{ padding: "2%"}}>
                   <h1> How do I Publish Blog? </h1>
                   <h3> You Must Login to Read Other Blogs. </h3>
 
@@ -366,12 +365,12 @@ const Home = () => {
                   </Timeline>
                 </Col>
 
-                <Col xs={24} md={11}>
+                <Col xs={24} md={11} style={{ padding: "2%"}}>
                   {localStorage.getItem("total_blogs_count") !== null ? (
                     <h1 style={{ fontSize: "40px" }}>
                       {" "}
                       Total Blogs Count:{" "}
-                      <span style={{ fontSize: "52px" }}>
+                      <span style={{ fontSize: "5rem" }}>
                         {" "}
                         {localStorage.getItem("total_blogs_count")}
                         <span

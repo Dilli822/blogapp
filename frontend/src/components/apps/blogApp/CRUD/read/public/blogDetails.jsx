@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Spin, Row, Col, Typography, Image, Layout } from "antd";
-import AppHeader from "../../header/header";
-import AppFooter from "../../footer/footer";
+import AppHeader from "../../../header/publicHeader";
+import AppFooter from "../../../footer/footer";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;

@@ -48,13 +48,6 @@ const AppHeader = () => {
     { key: "logout", label: "Logout" },
   ]);
 
-  const menuNotLoggedItems = [
-    { key: "home", label: "Home", path: "/" },
-    { key: "login", label: "Login", path: "/login" },
-    { key: "signup", label: "Signup", path: "/signup" },
-    { key: "about", label: "About Us", path: "/about" },
-  ];
-
   const fetchData = async () => {
     try {
       const response = await fetch(
@@ -181,8 +174,7 @@ const AppHeader = () => {
        </div>
 
       <div style={{ width: "50%"}}>
-        {/* Menu component */}
-      {isLoggedIn ? (
+
         <Menu
           theme="dark"
           mode="horizontal"
@@ -207,32 +199,7 @@ const AppHeader = () => {
             </Menu.Item>
           ))}
         </Menu>
-      ) : (
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["nav2"]}
-          style={{
-            display: "flex",
-            justifyContent: "end",
-          }}
-          onClick={({ key }) =>
-            onMenuItemClick(
-              menuNotLoggedItems.find((item) => item.key === key)?.path
-            )
-          }
-        >
-          {menuNotLoggedItems.map(({ key, label }) => (
-            <Menu.Item key={key}>
-              <Link
-                to={menuNotLoggedItems.find((item) => item.key === key)?.path}
-              >
-                {label}
-              </Link>
-            </Menu.Item>
-          ))}
-        </Menu>
-      )}
+     
       </div>
         </div>
 
