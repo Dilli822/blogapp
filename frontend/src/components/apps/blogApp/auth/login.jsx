@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Layout, Checkbox, message } from 'antd';
-import { useNavigate } from 'react-router-dom';  // Import the useNavigate hook
-import AppHeader from '../header/header';
+import { useNavigate } from 'react-router-dom';
+import AppHeader from '../header/publicHeader';
 import AppFooter from '../footer/footer';
 
 const Login = () => {
   const [form] = Form.useForm();
-  const [clientReady, setClientReady] = useState(false);
-  const [formLayout, setFormLayout] = useState('horizontal');
-  const navigate = useNavigate();  // Initialize the useNavigate hook
-
-  useEffect(() => {
-    setClientReady(true);
-  }, []);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
     try {
@@ -26,7 +21,18 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 401) {
+          const data = await response.json();
+          setErrorMessage(data.detail);
+          message.error(data.detail);
+        } else if (response.status === 503 || response.status === 500) {
+          message.error(data.detail);
+        }
+        
+        else {
+          throw new Error(`HTTP Error! Status: ${response.status}`);
+        }
+        return;
       }
 
       const data = await response.json();
@@ -36,63 +42,43 @@ const Login = () => {
       localStorage.setItem('refreshToken', refresh);
 
       message.success('Login successful!');
-      
-      // Navigate to the home path ("/") after successful login
       navigate('/feed');
     } catch (error) {
       console.error('Login failed:', error);
-      message.error('Login failed. Please check your credentials and try again.');
+      message.error(error.detail);
     }
   };
 
-  const onFormLayoutChange = ({ layout }) => {
-    setFormLayout(layout);
-  };
+  useEffect(() => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('total_blogs_count');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_name');
+    localStorage.removeItem('phone_number');
+    localStorage.removeItem('address');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('bio');
+    localStorage.removeItem('user_image');
+  }, []);
 
-  const formItemLayout =
-    formLayout === 'horizontal'
-      ? {
-          labelCol: {
-            span: 24,
-          },
-          wrapperCol: {
-            span: 24,
-          },
-        }
-      : null;
-
-  const buttonItemLayout =
-    formLayout === 'horizontal'
-      ? {
-          wrapperCol: {
-            span: 24,
-            offset: 4,
-          },
-        }
-      : null;
 
   return (
     <>
       <AppHeader />
-
       <Layout style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '90vh' }}>
         <Form
-          {...formItemLayout}
-          layout={formLayout}
           form={form}
-          initialValues={{
-            layout: formLayout,
-          }}
-          style={{
-            maxWidth: formLayout === 'inline' ? 'none' : 800,
-          }}
           name="normal_login"
           className="login-form"
           onFinish={onFinish}
         >
           <h1>Login</h1>
+          {errorMessage && (
+            <div style={{ marginBottom: 16, color: 'red' }}>{errorMessage}</div>
+          )}
           <Form.Item name="email" rules={[{ required: true, message: 'Please input your Username!' }]}>
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="email" type='email'/>
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" type="email" />
           </Form.Item>
           <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
             <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
@@ -101,12 +87,10 @@ const Login = () => {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
-
             <a className="login-form-forgot" href="/forgot-password">
               Forgot password
             </a>
           </Form.Item>
-
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>
               Log in
@@ -115,9 +99,9 @@ const Login = () => {
             Or <a href="/signup">register now!</a>
           </Form.Item>
         </Form>
-
         <AppFooter />
       </Layout>
+
     </>
   );
 };

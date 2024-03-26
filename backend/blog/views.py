@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import BlogDetails
-from .serializers import BlogDetailsSerializer
+from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.db.models.functions import ExtractYear
@@ -58,9 +58,12 @@ class BlogDetailsRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIV
                         status=status.HTTP_204_NO_CONTENT)
         
 class TotalBlogsCountAPIView(generics.ListCreateAPIView):
+    serializer_class = TotalBlogsCountSerializer  # Define the serializer class
+
     def get(self, request, *args, **kwargs):
         total_blogs_count = BlogDetails.objects.count()
-        return Response({"total_blogs_count": total_blogs_count})
+        serializer = self.get_serializer({"total_blogs_count": total_blogs_count})
+        return Response(serializer.data)
     
 class LatestBlog(generics.ListCreateAPIView):
     serializer_class = BlogDetailsSerializer

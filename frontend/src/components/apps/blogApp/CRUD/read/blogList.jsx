@@ -21,7 +21,6 @@ import {
   ExclamationCircleOutlined,
   DeleteRowOutlined,
 } from "@ant-design/icons";
-import Forbidden from "../../error/unathorizedAccess";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
 
@@ -41,6 +40,7 @@ const BlogList = () => {
   const [isLogged, setIsLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editHeader, setEditHeader] = useState("");
@@ -91,6 +91,10 @@ const BlogList = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+  const handleEditImageChange = (file) => {
+    // Handle changes to the edited image file
+    setEditImageFile(file);
   };
 
   const handleView = (id) => {
@@ -145,11 +149,6 @@ const BlogList = () => {
     setEditParagraph(e.target.value);
   };
 
-  const handleEditImageChange = (file) => {
-    // Handle changes to the edited image file
-    setEditImageFile(file);
-  };
-
   const handleEditPostBlog = async (id) => {
     // Show the edit modal
     setEditModalVisible(true);
@@ -173,6 +172,7 @@ const BlogList = () => {
       // Populate the fields with the fetched data
       setEditHeader(data.title);
       setEditParagraph(data.description);
+      setEditImageFile(data.image);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle errors or show a message to the user
@@ -181,6 +181,16 @@ const BlogList = () => {
 
   const submitEditChange = async () => {
     try {
+      // Validation for title and description
+      if (editHeader.length < 10) {
+        message.error("Title must be at least 10 characters long.");
+        return;
+      }
+      if (editParagraph.length < 50) {
+        message.error("Description must be at least 50 characters long.");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("title", editHeader);
       formData.append("description", editParagraph);
@@ -266,7 +276,7 @@ const BlogList = () => {
         </div>
       ) : (
         <div>
-          <Layout  className="ant-container">
+          <Layout className="ant-container">
             <Title>
               {" "}
               Blogs List <hr />
@@ -354,6 +364,23 @@ const BlogList = () => {
                       background: "none",
                     }}
                   />
+                  {editHeader.length < 10 && (
+                    <p style={{ color: "red" }}>
+                      Title must be at least 10 characters long.
+                    </p>
+                  )}
+
+                  <div>
+                    {/* Render the uploaded image */}
+                    {editImageFile && typeof editImageFile === "object" && (
+                      <img
+                        src={URL.createObjectURL(editImageFile)}
+                        alt="Uploaded Image"
+                        style={{ height: "250px" }}
+                      />
+                    )}
+                  </div>
+
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h3>Upload Picture/Image for your Blog</h3>
                     &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
@@ -364,7 +391,14 @@ const BlogList = () => {
                       <Button icon={<UploadOutlined />}>Click to Upload</Button>
                     </Upload>
                   </div>
+
                   <h3> Description: </h3>
+                  {editParagraph.length < 50 && (
+                    <p style={{ color: "red" }}>
+                      Description must be at least 50 characters long.
+                    </p>
+                  )}
+
                   <TextArea
                     showCount
                     minHeight={500}
@@ -395,6 +429,7 @@ const BlogList = () => {
               </Row>
             </Layout>
           </Modal>
+          <br />
         </div>
       )}
       <AppFooter />

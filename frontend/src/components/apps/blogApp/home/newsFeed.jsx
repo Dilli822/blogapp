@@ -35,7 +35,12 @@ const formatDate = (rawDate) => {
   return formattedDate;
 };
 
-const NewsFeed = () => {
+const NewsFeed = ({
+  fetchTotalBlogsData,
+  totalBlogsPosted,
+  isLoading,
+  error,
+}) => {
   const [visibleCards, setVisibleCards] = useState(4);
   const [isAdditionalVisible, setIsAdditionalVisible] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
@@ -112,6 +117,7 @@ const NewsFeed = () => {
             break;
           case 200:
             const data = await response.json();
+            console.log(data);
             data.sort((a, b) => new Date(b.date) - new Date(a.date));
             setBlogData(data);
             setNotFound("");
@@ -180,10 +186,15 @@ const NewsFeed = () => {
     <>
       <AppHeader></AppHeader>
 
-      <Layout className="ant-container " >
+      <Layout className="ant-container ">
         <>
           <br />
-          <h1 style={{ textAlign: "left" }}> Blog & Articles </h1>
+          <h2 style={{ textAlign: "left" }}> Blog & Articles </h2>
+          {blogData.length === 0 && (
+            <div style={{ textAlign: "left", marginTop: "20px", color: "red" }}>
+              <h1>No blogs to show</h1>
+            </div>
+          )}
 
           <Row gutter={24} style={{}}>
             <Col md={17} style={{}}>
@@ -236,10 +247,23 @@ const NewsFeed = () => {
                     <p>
                       <span>
                         {" "}
-                        <b>user_id: #{blogItem.user_id}, </b>{" "}
-                        <b>Published By: {blogItem.username} ,</b>{" "}
+                        {/* <b>#{blogItem.user}, </b>{" "} */}
+                        <b>{blogItem.username} ,</b> &nbsp;
+                        <span>
+                          🗓️{" "}
+                          {new Date(blogItem.created_at).toLocaleString(
+                            "en-US",
+                            {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "2-digit",
+                              hour12: true,
+                            }
+                          )}
+                        </span>
                       </span>
-                      🗓️ {formatDate(blogItem.date)}
                     </p>
                   </Col>
                 </Col>
@@ -294,12 +318,8 @@ const NewsFeed = () => {
                               />
                             }
                           >
-                            <div style={{ height: 20, overflow: "hidden" }}>
-                              <Meta
-                                title={blogItem.title}
-                                description={blogItem.description}
-                              />
-                              <p>{blogItem.date}</p>
+                            <div style={{ height: "auto", overflow: "hidden" }}>
+                              <h4>{blogItem.title} </h4>
                             </div>
                           </Card>
                         </Link>
@@ -325,7 +345,17 @@ const NewsFeed = () => {
                     >
                       <img src={blogItem.image} style={{ width: "100px" }} />
                       <h3>{blogItem.title}</h3>
-                      <p>🗓️ {blogItem.created_at}</p>
+                      <p>
+                        🗓️{" "}
+                        {new Date(blogItem.created_at).toLocaleString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}{" "}
+                      </p>
                       <p style={{ height: "50px", overflow: "hidden" }}>
                         {blogItem.description}{" "}
                       </p>
@@ -337,20 +367,22 @@ const NewsFeed = () => {
             </Col>
           </Row>
 
-          <div style={{ textAlign: "left", marginTop: "20px" }}>
-            <Button
-              icon={
-                isAdditionalVisible ? (
-                  <ArrowLeftOutlined />
-                ) : (
-                  <ArrowRightOutlined />
-                )
-              }
-              onClick={handleToggleVisibility}
-            >
-              {isAdditionalVisible ? "Hide" : "View More"}
-            </Button>
-          </div>
+          {blogData.length > visibleCards && (
+            <div style={{ textAlign: "left", marginTop: "20px" }}>
+              <Button
+                icon={
+                  isAdditionalVisible ? (
+                    <ArrowLeftOutlined />
+                  ) : (
+                    <ArrowRightOutlined />
+                  )
+                }
+                onClick={handleToggleVisibility}
+              >
+                {isAdditionalVisible ? "Hide" : "View More"}
+              </Button>
+            </div>
+          )}
         </>
         <br />
         <br />

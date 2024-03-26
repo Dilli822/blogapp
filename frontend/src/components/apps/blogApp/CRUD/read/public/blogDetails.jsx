@@ -52,11 +52,17 @@ const PublicBlogDetails = () => {
     <>
       <AppHeader />
       {/* Content inside Layout with 10% padding */}
-      <Content  className="ant-container">
+      <Content className="ant-container">
         <Row>
           <Col span={24}>
             <Title>{details.title}</Title>
-            <Text>Published at: {details.created_at}</Text>
+            <Text>
+              {new Date(details.created_at).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </Text>
             <br />
 
             <div style={{ textAlign: "center" }}>
@@ -81,6 +87,7 @@ const PublicBlogDetails = () => {
           </Col>
         </Row>
       </Content>{" "}
+      <br />
       <br />
       <AppFooter />
     </>

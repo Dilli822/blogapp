@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Layout, Form, Input, Button, Checkbox, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+import { Layout, Form, Input, Button, Checkbox, message } from "antd";
+import { useNavigate } from "react-router-dom";
 
-import AppHeader from '../header/header';
-import AppFooter from '../footer/footer';
+import AppHeader from "../header/publicHeader";
+import AppFooter from "../footer/footer";
 
 const Signup = () => {
   const [form] = Form.useForm();
@@ -16,24 +16,38 @@ const Signup = () => {
       setLoading(true);
 
       // Use the register API endpoint
-      const response = await fetch('http://127.0.0.1:8000/account/api/register/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
+      const response = await fetch(
+        "http://127.0.0.1:8000/account/api/register/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         // If registration is successful, show success message, then navigate to login
-        message.success('Signup successful!', 25);
-        navigate('/login');
+        message.success("Signup successful!", 25);
+        navigate("/login");
       } else {
-        // If there are errors, show them
-        message.error(data.detail || 'Error during signup. Please try again.');
+        if (response.status === 400) {
+          // Handle validation errors
+          const errorMessages = Object.values(data).flat().join(", ");
+          message.error(errorMessages);
+        } else {
+          // Handle other errors
+          message.error(
+            data.detail || "Error during signup. Please try again."
+          );
+        }
       }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      message.error("An unexpected error occurred. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -54,10 +68,30 @@ const Signup = () => {
     },
   };
 
+  useEffect(() => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("total_blogs_count");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("phone_number");
+    localStorage.removeItem("address");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("bio");
+    localStorage.removeItem("user_image");
+  }, []);
+
   return (
     <>
       <AppHeader />
-      <Layout style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '90vh' }}>
+      <Layout
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "90vh",
+        }}
+      >
         <Form
           {...formItemLayout}
           form={form}
@@ -69,41 +103,59 @@ const Signup = () => {
           <h1>Create a user account</h1>
           <Form.Item
             name="first_name"
-            rules={[{ required: true, message: 'Please input your firstname!' }]}
+            rules={[
+              { required: true, message: "Please input your firstname!" },
+            ]}
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="firstname" />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="firstname"
+            />
           </Form.Item>
 
           <Form.Item
             name="last_name"
-            rules={[{ required: true, message: 'Please input your lastname!' }]}
+            rules={[{ required: true, message: "Please input your lastname!" }]}
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="lastname" />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="lastname"
+            />
           </Form.Item>
 
           <Form.Item
             name="username"
             rules={[
-              { required: true, message: 'Please input your username!' },
-              { min: 5, message: 'Username must be at least 5 characters.' },
+              { required: true, message: "Please input your username!" },
+              { min: 5, message: "Username must be at least 5 characters." },
             ]}
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Username"
+            />
           </Form.Item>
 
           <Form.Item
             name="email"
             rules={[
-              { required: true, type: 'email', message: 'Please enter a valid email address!' },
+              {
+                required: true,
+                type: "email",
+                message: "Please enter a valid email address!",
+              },
             ]}
           >
-            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email" />
+            <Input
+              prefix={<MailOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+            />
           </Form.Item>
 
           <Form.Item
             name="password"
             rules={[
-              { required: true, message: 'Please input your Password!' },
+              { required: true, message: "Please input your Password!" },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (
@@ -114,9 +166,17 @@ const Signup = () => {
                   ) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(
-                    'Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one digit, and one special character.'
-                  );
+                  return Promise.reject({
+                    message: "Password must meet the following criteria:",
+                    // Use HTML <br> tags for line breaks
+                    message: (
+                      <div>
+                        Password must be at least 8 characters long <br />
+                        one lowercase letter, uppercase letter, digit &<br />
+                        special character
+                      </div>
+                    ),
+                  });
                 },
               }),
             ]}
@@ -130,15 +190,15 @@ const Signup = () => {
 
           <Form.Item
             name="confirmPassword"
-            dependencies={['password']}
+            dependencies={["password"]}
             rules={[
-              { required: true, message: 'Please confirm your Password!' },
+              { required: true, message: "Please confirm your Password!" },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
+                  if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject('The two passwords do not match!');
+                  return Promise.reject("The two passwords do not match!");
                 },
               }),
             ]}
@@ -161,7 +221,7 @@ const Signup = () => {
               type="primary"
               htmlType="submit"
               className="signup-form-button"
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               loading={loading}
             >
               Sign Up

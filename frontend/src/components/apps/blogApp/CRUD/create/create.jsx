@@ -13,6 +13,7 @@ import {
 import { SaveOutlined, UploadOutlined } from "@ant-design/icons";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
+import Forbidden from "../../error/unathorizedAccess";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -41,6 +42,7 @@ const Create = () => {
   const [imageFile, setImageFile] = useState(null);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLogged, setIsLogged] = useState(true);
   const [error, setError] = useState(null);
 
   const handleHeaderChange = (e) => {
@@ -52,6 +54,18 @@ const Create = () => {
     console.log(e.target.value);
   };
   const handlePostBlog = () => {
+    // Check if the title meets the minimum length requirement
+    if (header.length < 5) {
+      message.error("Title must be at least 10 characters long.");
+      return;
+    }
+
+    // Check if the description meets the minimum length requirement
+    if (paragraph.length < 20) {
+      message.error("Description must be at least 50 characters long.");
+      return;
+    }
+
     setLoading(true);
 
     // Create a FormData object to handle the blog post data and image
@@ -151,6 +165,11 @@ const Create = () => {
     setIsLoading(false);
   });
 
+  if (!localStorage.getItem("user_name") && !localStorage.getItem("user_id")) {
+    setIsLogged(false);
+    return <Forbidden />;
+  }
+
   return (
     <>
       <AppHeader />
@@ -194,13 +213,26 @@ const Create = () => {
                   height: "auto",
                 }}
               />
-              <div style={{ display: "flex", alignItems: "center" }}>
+
+              <div>
+                {/* Render the uploaded image */}
+                {imageFile && (
+                  <img
+                    src={URL.createObjectURL(imageFile)}
+                    alt="Uploaded Image"
+                    style={{ height: "250px" }}
+                  />
+                )}
+              </div>
+              {/* <div style={{ display: "flex", alignItems: "center" }}> */}
+              <div style={{ display: "block", alignItems: "center" }}>
                 <h3>Upload Picture/Image for your Blog</h3>
-                &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <Upload {...props}>
                   <Button icon={<UploadOutlined />}>Click to Upload</Button>
                 </Upload>
               </div>
+
               <h3> Description: </h3>
               <TextArea
                 showCount
@@ -231,7 +263,9 @@ const Create = () => {
                 Post/Publish Blog
               </Button>
             </Col>
+            <br></br>
           </Layout>
+          <br></br>
         </div>
       )}
 

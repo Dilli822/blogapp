@@ -14,6 +14,7 @@ import {
 } from "antd";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
+import Forbidden from "../../error/unathorizedAccess";
 import { Link } from "react-router-dom";
 
 import {
@@ -84,6 +85,16 @@ const UserProfile = () => {
       if (response.ok) {
         // Successful deletion
         console.log("User account deleted successfully");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("total_blogs_count");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("user_name");
+        localStorage.removeItem("phone_number");
+        localStorage.removeItem("address");
+        localStorage.removeItem("user_email");
+        localStorage.removeItem("bio");
+        localStorage.removeItem("user_image");
 
         // Redirect to the specified path after successful deletion
         window.location.href = "/";
@@ -357,6 +368,24 @@ const UserProfile = () => {
     [editBio]
   );
 
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "calc(100vh - 64px)", // Subtract the height of the header
+        }}
+      >
+        <Spin size="large" />
+      </div>
+    );
+  }
+  if (!isLogged) {
+    return <Forbidden />;
+  }
+
   return (
     <>
       <AppHeader />
@@ -385,7 +414,7 @@ const UserProfile = () => {
         </div>
       ) : (
         <div>
-          <Layout  className="ant-container">
+          <Layout className="ant-container">
             <br />
 
             <Row>
@@ -397,7 +426,7 @@ const UserProfile = () => {
                     <img
                       alt="example"
                       src={firstUserImg?.image || ""}
-                      style={{ padding: "15px" }}
+                      style={{ padding: "15px", maxWidth: "100%" }}
                     />
                   }
                 >
@@ -585,15 +614,15 @@ const UserProfile = () => {
                         {blogList.map((item) => (
                           <Col
                             key={item.id}
-                            md={23}
+                            md={12}
                             xs={24}
                             style={{
-                              height: "150px",
+                              height: "auto",
                               overflow: "hidden",
                               border: "1px solid #d9d9d9",
                               borderRadius: "5px",
-                              margin: "1%",
-                              padding: "2%",
+                              margin: "0",
+                              padding: "1%",
                               boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);",
                             }}
                           >
@@ -602,8 +631,8 @@ const UserProfile = () => {
                                 src={item.image}
                                 alt="Blog"
                                 style={{
-                                  width: "50px",
-                                  height: "auto",
+                                  width: "100%",
+                                  height: "",
                                   marginBottom: 8,
                                 }}
                               />
@@ -620,9 +649,6 @@ const UserProfile = () => {
                               >
                                 {item.title}
                               </Link>
-                            </div>
-                            <div style={{ color: "#888", marginTop: 4 }}>
-                              {item.description}
                             </div>
                             <div style={{ marginTop: 8 }}>
                               <Link to={`/blogs`}>View Blogs</Link>

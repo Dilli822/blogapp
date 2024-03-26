@@ -61,11 +61,14 @@ const Details = () => {
               <Row>
                 <Col span={24}>
                   <Title>{details.title}</Title>
-                  <Text>Published at: {details.created_at}</Text>
+                  <Text>{new Date(details.created_at).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })} 
+                  &nbsp; | {details.username}{" "}
+                  </Text>
                   <Text>
                     <p>
                       {" "}
-                      #{details.user} | #{details.username}{" "}
+                      {/* {details.user} | */}
+              
                     </p>
                   </Text>
                   <br />

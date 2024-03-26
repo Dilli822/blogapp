@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Typography, Row, Col } from "antd";
-import AppHeader from "../header/header";
+import AppHeader from "../header/publicHeader";
 import AppFooter from "../footer/footer";
 import aboutImage from "../img/logo/bloglogo1.jpg"; // Import your image here
 import aboutImg from "../img/about/about.svg"

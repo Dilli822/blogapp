@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Modal,Row, Col } from "antd";
+import { Layout, Menu, Modal, Row, Col } from "antd";
 import { Link } from "react-router-dom";
 // import logoImage from "../img/logo/bloglogo1.jpg"
 // import logoImage from "../img/logo/B-logo.png"
@@ -103,15 +103,15 @@ const AppHeader = () => {
         onOk() {
           // Handle logout action
           // used localstorage instead of session for now
-          localStorage.removeItem("user_id");
-          localStorage.removeItem("user_name");
-          localStorage.removeItem("user_email");
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
-          localStorage.removeItem("user_image");
-          localStorage.removeItem("address");
+          localStorage.removeItem("user_id");
+          localStorage.removeItem("user_name");
           localStorage.removeItem("phone_number");
+          localStorage.removeItem("address");
+          localStorage.removeItem("user_email");
           localStorage.removeItem("bio");
+          localStorage.removeItem("user_image");
 
           // Remove the 'path' property from the 'menuLoggedItems' array
           const updatedMenuLoggedItems = menuLoggedItems.map((item) => {
@@ -140,75 +140,65 @@ const AppHeader = () => {
   }, []);
 
   return (
-<>
+    <>
+      <Header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 999,
+          width: "100%",
+          // display: "flex",
+          // alignItems: "center",
+          padding: "5px 0",
+        }}
+      >
+        <div className="ant-container " style={{ display: "flex" }}>
+          {/*  Logo Component Here */}
 
-    <Header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 999,
-        width: "100%",
-        // display: "flex",
-        // alignItems: "center",
-        padding: "5px 0",
-      }}
-    >
+          <div style={{ width: "50%" }}>
+            <Link to={"/feed"}>
+              <img
+                src={logoImage}
+                alt="Logo"
+                style={{
+                  width: "50px",
+                  verticalAlign: "middle",
+                  borderRadius: "10px",
+                }}
+              />
+            </Link>
+          </div>
 
-      <div className="ant-container " style={{ display: "flex"}}>
-        
-            {/*  Logo Component Here */}
-  
-  <div style={{ width: "50%"}}>
-
-        <Link to={"/feed"}>
-          <img
-            src={logoImage}
-            alt="Logo"
-            style={{
-              width: "50px",
-              verticalAlign: "middle",
-              borderRadius: "10px",
-            }}
-          />
-        </Link>
-       </div>
-
-      <div style={{ width: "50%"}}>
-
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["nav2"]}
-          style={{
-            // width: "50%",
-            display: "flex",
-            justifyContent: "end",
-          }}
-          onClick={({ key }) =>
-            onMenuItemClick(
-              menuLoggedItems.find((item) => item.key === key)?.label,
-              menuLoggedItems.find((item) => item.key === key)?.path
-            )
-          }
-        >
-          {menuLoggedItems.map(({ key, label }) => (
-            <Menu.Item key={key}>
-              <Link to={menuLoggedItems.find((item) => item.key === key)?.path}>
-                {label}
-              </Link>
-            </Menu.Item>
-          ))}
-        </Menu>
-     
-      </div>
+          <div style={{ width: "50%" }}>
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={["nav2"]}
+              style={{
+                // width: "50%",
+                display: "flex",
+                justifyContent: "end",
+              }}
+              onClick={({ key }) =>
+                onMenuItemClick(
+                  menuLoggedItems.find((item) => item.key === key)?.label,
+                  menuLoggedItems.find((item) => item.key === key)?.path
+                )
+              }
+            >
+              {menuLoggedItems.map(({ key, label }) => (
+                <Menu.Item key={key}>
+                  <Link
+                    to={menuLoggedItems.find((item) => item.key === key)?.path}
+                  >
+                    {label}
+                  </Link>
+                </Menu.Item>
+              ))}
+            </Menu>
+          </div>
         </div>
-
- 
-    
-  
-      
-
-    </Header>
+      </Header>
     </>
   );
 };
