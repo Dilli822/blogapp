@@ -14,6 +14,7 @@ import {
   AutoComplete,
   Input,
   Spin,
+  Alert,
 } from "antd";
 
 import {
@@ -193,6 +194,17 @@ const NewsFeed = ({
           {blogData.length === 0 && (
             <div style={{ textAlign: "left", marginTop: "20px", color: "red" }}>
               <h1>No blogs to show</h1>
+              <div>
+                <Alert message={error || ".No Data Found"} type="error" />
+                <Button
+                  style={{ marginTop: "10px" }}
+                  onClick={() => window.location.reload()}
+                >
+                  {" "}
+                  Reload Again{" "}
+                </Button>
+              </div>
+              <div></div>
             </div>
           )}
 
@@ -240,8 +252,14 @@ const NewsFeed = ({
                     >
                       <h2>{blogItem.title}</h2>
 
-                      <p style={{ height: "50px", overflow: "hidden" }}>
-                        {blogItem.description}
+                      <p>
+                        {blogItem.description
+                          .split(" ")
+                          .slice(0, 20)
+                          .join(" ") +
+                          (blogItem.description.split(" ").length > 50
+                            ? " ..."
+                            : "")}
                       </p>
                     </Link>
                     <p>
@@ -268,6 +286,24 @@ const NewsFeed = ({
                   </Col>
                 </Col>
               ))}
+
+              {blogData.length > visibleCards && (
+                <div style={{ textAlign: "left", marginTop: "20px" }}>
+                  <Button
+                    icon={
+                      isAdditionalVisible ? (
+                        <ArrowLeftOutlined />
+                      ) : (
+                        <ArrowRightOutlined />
+                      )
+                    }
+                    onClick={handleToggleVisibility}
+                  >
+                    {isAdditionalVisible ? "Hide" : "View More"}
+                  </Button>
+                </div>
+              )}
+              <br />
 
               {notFound ? <h1>Not Found Error</h1> : ""}
             </Col>
@@ -356,9 +392,17 @@ const NewsFeed = ({
                           hour12: true,
                         })}{" "}
                       </p>
-                      <p style={{ height: "50px", overflow: "hidden" }}>
-                        {blogItem.description}{" "}
-                      </p>
+                      <p>
+                        {blogItem.description
+                          .split(" ")
+                          .slice(0, 20)
+                          .join(" ") +
+                          (blogItem.description.split(" ").length > 50
+                            ? " ..."
+                            : "")}
+                      </p>{" "}
+                      <hr />
+                      <br></br>
                     </Link>
                     {/* <p>🗓️ {blogItem.created_at.toLocaleString()} </p> */}
                   </Col>
@@ -366,27 +410,9 @@ const NewsFeed = ({
               ))}
             </Col>
           </Row>
-
-          {blogData.length > visibleCards && (
-            <div style={{ textAlign: "left", marginTop: "20px" }}>
-              <Button
-                icon={
-                  isAdditionalVisible ? (
-                    <ArrowLeftOutlined />
-                  ) : (
-                    <ArrowRightOutlined />
-                  )
-                }
-                onClick={handleToggleVisibility}
-              >
-                {isAdditionalVisible ? "Hide" : "View More"}
-              </Button>
-            </div>
-          )}
         </>
-        <br />
-        <br />
       </Layout>
+      <br />
       <AppFooter />
     </>
   );

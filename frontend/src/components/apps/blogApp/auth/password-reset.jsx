@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message, Row, Col, Layout } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import AppHeader from "../header/publicHeader";
 import AppFooter from "../footer/footer";
 
@@ -9,6 +9,7 @@ const PasswordResetPage = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const { token } = useParams(); // Extract token from URL path
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -29,8 +30,13 @@ const PasswordResetPage = () => {
       if (response.ok) {
         message.success("Password reset successful");
         form.resetFields();
+        setTimeout(() => {
+          navigate("/login"); // Redirect to the login page after 20 milliseconds
+        }, 1000);
       } else {
-        message.error("Failed to reset password. Please try again later.");
+        message.error(
+          "Failed to reset password. Token Expired. Please send your reset-email again."
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -49,7 +55,7 @@ const PasswordResetPage = () => {
       <AppHeader />
       <Layout>
         <Row justify="center" align="middle" style={{ minHeight: "80vh" }}>
-          <Col xs={22} sm={12} md={9} lg={7} xl={6}>
+          <Col xs={22} sm={12} md={9} lg={8} xl={7}>
             <div
               style={{
                 padding: "20px",
@@ -83,14 +89,31 @@ const PasswordResetPage = () => {
                 <Form.Item
                   name="newPassword"
                   rules={[
-                    {
-                      required: true,
-                      message: "Please input your new password!",
-                    },
-                    {
-                      min: 6,
-                      message: "Password must be at least 6 characters long!",
-                    },
+                    { required: true, message: "Please input your Password!" },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (
+                          !value ||
+                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+                            value
+                          )
+                        ) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject({
+                          message: "Password must meet the following criteria:",
+                          // Use HTML <br> tags for line breaks
+                          message: (
+                            <div>
+                              Password must be at least 8 characters long <br />
+                              one lowercase letter, uppercase letter, digit &
+                              <br />
+                              special character
+                            </div>
+                          ),
+                        });
+                      },
+                    }),
                   ]}
                 >
                   <Input.Password
@@ -105,7 +128,7 @@ const PasswordResetPage = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Please confirm your new password!",
+                      message: "Please confirm your Password!",
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
@@ -113,7 +136,7 @@ const PasswordResetPage = () => {
                           return Promise.resolve();
                         }
                         return Promise.reject(
-                          new Error("The two passwords do not match!")
+                          "The two passwords do not match!"
                         );
                       },
                     }),
@@ -135,6 +158,9 @@ const PasswordResetPage = () => {
                     Reset Password
                   </Button>
                 </Form.Item>
+                <a className="login-form-forgot" href="/forgot-password">
+                  Resend Password Reset-Mail?
+                </a>
               </Form>
             </div>
           </Col>

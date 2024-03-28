@@ -10,9 +10,6 @@ import {
   Input,
   Upload,
   message,
-  Alert,
-  Spin,
-  Row,
 } from "antd";
 import {
   EditOutlined,
@@ -21,6 +18,7 @@ import {
   ExclamationCircleOutlined,
   DeleteRowOutlined,
 } from "@ant-design/icons";
+
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
 
@@ -37,16 +35,13 @@ const BlogList = () => {
   const [data, setData] = useState([]);
   const [list, setList] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
-  const [isLogged, setIsLogged] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editHeader, setEditHeader] = useState("");
   const [editParagraph, setEditParagraph] = useState("");
   const [editImageFile, setEditImageFile] = useState(null); // State to track the edited image file
   const [editLoading, setEditLoading] = useState(false);
+  const [clickedBlogImage, setClickedBlogImage] = useState(null);
 
   // Declare id state variable
   const [id, setId] = useState(null);
@@ -87,14 +82,7 @@ const BlogList = () => {
       setList((prevList) => prevList.filter((item) => item.id !== id));
     } catch (error) {
       console.error("Error deleting blog:", error);
-      setError("Something went wrong! Failed to delete data");
-    } finally {
-      setIsLoading(false);
     }
-  };
-  const handleEditImageChange = (file) => {
-    // Handle changes to the edited image file
-    setEditImageFile(file);
   };
 
   const handleView = (id) => {
@@ -120,7 +108,6 @@ const BlogList = () => {
       }
 
       const result = await response.json();
-      setIsLogged(true);
 
       // Sort the data in ascending order based on the date
       result.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -128,16 +115,8 @@ const BlogList = () => {
       setInitLoading(false);
       setData(result);
       setList(result);
-      setIsLoading(false);
-      if (response.status === 401) {
-        setIsLogged(false);
-        setIsLoading(true);
-      }
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Something went wrong! Failed to fetch data");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -147,6 +126,11 @@ const BlogList = () => {
 
   const handleEditParagraphChange = (e) => {
     setEditParagraph(e.target.value);
+  };
+
+  const handleEditImageChange = (file) => {
+    // Handle changes to the edited image file
+    setEditImageFile(file);
   };
 
   const handleEditPostBlog = async (id) => {
@@ -172,7 +156,8 @@ const BlogList = () => {
       // Populate the fields with the fetched data
       setEditHeader(data.title);
       setEditParagraph(data.description);
-      setEditImageFile(data.image);
+      // Set the image URL of the clicked blog post
+      setClickedBlogImage(data.image);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle errors or show a message to the user
@@ -181,16 +166,6 @@ const BlogList = () => {
 
   const submitEditChange = async () => {
     try {
-      // Validation for title and description
-      if (editHeader.length < 10) {
-        message.error("Title must be at least 10 characters long.");
-        return;
-      }
-      if (editParagraph.length < 50) {
-        message.error("Description must be at least 50 characters long.");
-        return;
-      }
-
       const formData = new FormData();
       formData.append("title", editHeader);
       formData.append("description", editParagraph);
@@ -233,7 +208,7 @@ const BlogList = () => {
         });
         return newData;
       });
-
+      message.success("Blog Updated Successfully");
       // Close the modal
       setEditModalVisible(false);
 
@@ -252,186 +227,143 @@ const BlogList = () => {
   return (
     <>
       <AppHeader />
-      {isLoading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "calc(100vh - 64px)", // Subtract the height of the header
-          }}
-        >
-          <Spin size="large" />
-        </div>
-      ) : error ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "calc(100vh - 64px)", // Subtract the height of the header
-          }}
-        >
-          <Alert message={error} type="error" />
-        </div>
-      ) : (
-        <div>
-          <Layout className="ant-container">
-            <Title>
-              {" "}
-              Blogs List <hr />
-            </Title>
+      <Layout style={{ padding: "0 10%" }}>
+        <Title>
+          {" "}
+          Blogs List <hr />
+        </Title>
 
-            <List
-              className="demo-loadmore-list"
-              loading={initLoading}
-              itemLayout="horizontal"
-              dataSource={list}
-              renderItem={(item) => (
-                <List.Item
-                  actions={[
-                    <Button
-                      icon={<EditOutlined />}
-                      onClick={() => {
-                        setId(item.id); // Set the id before calling handleEditPostBlog
-                        handleEditPostBlog(item.id);
-                      }}
-                    >
-                      Edit
-                    </Button>,
-                    <Button
-                      danger
-                      icon={<DeleteOutlined />}
-                      onClick={() => showDeleteConfirm(item.id)}
-                    >
-                      Delete
-                    </Button>,
-
-                    <Button
-                      icon={<FolderViewOutlined />}
-                      onClick={() => handleView(item.id)}
-                    >
-                      View
-                    </Button>,
-                  ]}
+        <List
+          className="demo-loadmore-list"
+          loading={initLoading}
+          itemLayout="horizontal"
+          dataSource={list}
+          renderItem={(item) => (
+            <List.Item
+              actions={[
+                <Button
+                  icon={<EditOutlined />}
+                  onClick={() => {
+                    setId(item.id); // Set the id before calling handleEditPostBlog
+                    handleEditPostBlog(item.id);
+                  }}
                 >
-                  <div
-                    style={{
-                      display: "block",
-                      height: "200px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {/* <img src="{item.src}" alt="" srcset="" /> */}
-                    <img
-                      src={item.image}
-                      alt=""
-                      srcset=""
-                      style={{ width: "100px" }}
-                    />
-                    <h2> {item.title}</h2>
-                    <p> {item.description} </p>
-                  </div>
-                </List.Item>
-              )}
+                  Edit
+                </Button>,
+                <Button
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={() => showDeleteConfirm(item.id)}
+                >
+                  Delete
+                </Button>,
+
+                <Button
+                  icon={<FolderViewOutlined />}
+                  onClick={() => handleView(item.id)}
+                >
+                  View
+                </Button>,
+              ]}
+            >
+              <div
+                style={{
+                  display: "block",
+                  height: "150px",
+                  overflow: "hidden",
+                }}
+              >
+                {/* <img src="{item.src}" alt="" srcset="" /> */}
+                <img
+                  src={item.image}
+                  alt=""
+                  srcset=""
+                  style={{ width: "50px" }}
+                />
+                <h2> {item.title}</h2>
+                <p> {item.description} </p>
+              </div>
+            </List.Item>
+          )}
+        />
+      </Layout>
+
+      <Modal
+        title="Edit Blog"
+        visible={editModalVisible}
+        onCancel={() => setEditModalVisible(false)}
+        footer={null} // No footer for simplicity, you can customize it
+        width="70%" 
+      >
+        <Layout style={{ padding: "3%" }}>
+          <Col>
+            <h3>Title: </h3>
+            <Input
+              placeholder="Enter Blog Title"
+              value={editHeader}
+              onChange={handleEditHeaderChange}
+              style={{
+                marginBottom: "auto",
+                border: "none",
+                background: "none",
+              }}
             />
-          </Layout>
+            <div>
+              {editImageFile ? ( // Check if there's a new image file
+                <img
+                  src={URL.createObjectURL(editImageFile)}
+                  alt="New Image"
+                  style={{ maxWidth: "100%", maxHeight: "200px" }}
+                /> // Display the new image
+              ) : (
+                <img
+                  src={clickedBlogImage}
+                  alt="Existing Image"
+                  style={{ maxWidth: "100%", maxHeight: "200px" }}
+                /> // Display the existing image
+              )}
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <h3>Upload Picture/Image for your Blog</h3>
+              &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+              <Upload
+                beforeUpload={() => false} // Prevent default upload behavior
+                onChange={(info) => handleEditImageChange(info.file)}
+              >
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
+            </div>
+            <h3> Description: </h3>
+            <TextArea
+              showCount
+              minHeight={500}
+              onChange={handleEditParagraphChange}
+              placeholder="Write your blog content here."
+              rows={15}
+              value={editParagraph}
+            />
+          </Col>
 
-          <Modal
-            title="Edit Blog"
-            visible={editModalVisible}
-            onCancel={() => setEditModalVisible(false)}
-            footer={null} // No footer for simplicity, you can customize it
-            width={{
-              xs: "100%",
-              sm: "100%",
-              md: "100%",
-              lg: "100%",
-              xl: "100%",
-            }} // Responsive width
-          >
-            <Layout style={{ padding: "2%" }}>
-              <Row>
-                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                  <h3>Title: </h3>
-                  <Input
-                    placeholder="Enter Blog Title"
-                    value={editHeader}
-                    onChange={handleEditHeaderChange}
-                    style={{
-                      marginBottom: "auto",
-                      border: "none",
-                      background: "none",
-                    }}
-                  />
-                  {editHeader.length < 10 && (
-                    <p style={{ color: "red" }}>
-                      Title must be at least 10 characters long.
-                    </p>
-                  )}
+          <Col>
+            <br />
+            <Button
+              icon={<DeleteRowOutlined />}
+              onClick={() => setEditModalVisible(false)}
+            >
+              Discard Changes
+            </Button>
+            &nbsp;
+            <Button
+              icon={<SaveOutlined />}
+              onClick={submitEditChange}
+              loading={editLoading}
+            >
+              Save/Publish Changes
+            </Button>
+          </Col>
+        </Layout>
+      </Modal>
 
-                  <div>
-                    {/* Render the uploaded image */}
-                    {editImageFile && typeof editImageFile === "object" && (
-                      <img
-                        src={URL.createObjectURL(editImageFile)}
-                        alt="Uploaded Image"
-                        style={{ height: "250px" }}
-                      />
-                    )}
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <h3>Upload Picture/Image for your Blog</h3>
-                    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-                    <Upload
-                      beforeUpload={() => false} // Prevent default upload behavior
-                      onChange={(info) => handleEditImageChange(info.file)}
-                    >
-                      <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
-                  </div>
-
-                  <h3> Description: </h3>
-                  {editParagraph.length < 50 && (
-                    <p style={{ color: "red" }}>
-                      Description must be at least 50 characters long.
-                    </p>
-                  )}
-
-                  <TextArea
-                    showCount
-                    minHeight={500}
-                    onChange={handleEditParagraphChange}
-                    placeholder="Write your blog content here."
-                    rows={15}
-                    value={editParagraph}
-                  />
-                </Col>
-
-                <Col>
-                  <br />
-                  <Button
-                    icon={<DeleteRowOutlined />}
-                    onClick={() => setEditModalVisible(false)}
-                  >
-                    Discard Changes
-                  </Button>
-                  &nbsp;
-                  <Button
-                    icon={<SaveOutlined />}
-                    onClick={submitEditChange}
-                    loading={editLoading}
-                  >
-                    Save/Publish Changes
-                  </Button>
-                </Col>
-              </Row>
-            </Layout>
-          </Modal>
-          <br />
-        </div>
-      )}
       <AppFooter />
     </>
   );

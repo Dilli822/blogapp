@@ -2,12 +2,12 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import BlogDetails
-from .serializers import *
+from .serializers import BlogDetailsSerializer, TotalBlogsCountSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.db.models.functions import ExtractYear
 from django.utils import timezone
-
+from django.db.models import Q
 
 class BlogDetailsListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -15,7 +15,8 @@ class BlogDetailsListCreateAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         # Exclude blogs of the authenticated user
-        return BlogDetails.objects.exclude(user=self.request.user)
+        # return BlogDetails.objects.exclude(user=self.request.user)
+        return BlogDetails.objects.filter(Q(user=self.request.user) | ~Q(user=self.request.user))
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -58,12 +59,9 @@ class BlogDetailsRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIV
                         status=status.HTTP_204_NO_CONTENT)
         
 class TotalBlogsCountAPIView(generics.ListCreateAPIView):
-    serializer_class = TotalBlogsCountSerializer  # Define the serializer class
-
     def get(self, request, *args, **kwargs):
         total_blogs_count = BlogDetails.objects.count()
-        serializer = self.get_serializer({"total_blogs_count": total_blogs_count})
-        return Response(serializer.data)
+        return Response({"total_blogs_count": total_blogs_count})
     
 class LatestBlog(generics.ListCreateAPIView):
     serializer_class = BlogDetailsSerializer
@@ -107,3 +105,12 @@ class LatestOpenRecentBlogs(generics.ListCreateAPIView):
             return Response(serializer.data)
         else:
             return Response({"detail": "No blog posts found in the database."})
+        
+        
+class TotalBlogsCountAPIView(generics.ListCreateAPIView):
+    serializer_class = TotalBlogsCountSerializer  # Define the serializer class
+
+    def get(self, request, *args, **kwargs):
+        total_blogs_count = BlogDetails.objects.count()
+        serializer = self.get_serializer({"total_blogs_count": total_blogs_count})
+        return Response(serializer.data)

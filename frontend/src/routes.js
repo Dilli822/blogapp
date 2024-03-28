@@ -37,7 +37,7 @@ const MainRouter = () => {
 
         <Route path="/create" element={<Create />} />
 
-        <Route path="/update/:id" element={<Update />} />
+        <Route path="/blogs/update/:id" element={<Update />} />
 
         <Route path="/details/:id" element={<Details />} />
 

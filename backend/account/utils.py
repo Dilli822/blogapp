@@ -22,7 +22,7 @@ def send_email_view(request, email):
     user_details, _ = UserDetails.objects.get_or_create(user=user_data)
     user_details.password_reset_token = token
     user_details.password_reset_token_generated_time = timezone.now()
-    user_details.password_reset_token_expire = timezone.now() + timedelta(minutes=25)
+    user_details.password_reset_token_expire = timezone.now() + timedelta(minutes=5)
     user_details.save()
 
     # Compose email message

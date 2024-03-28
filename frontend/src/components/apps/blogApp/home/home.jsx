@@ -156,6 +156,16 @@ const Home = () => {
     fetchRandomBlogsData();
     fetchRecentBlogsData();
     fetchTotalBlogsData();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("total_blogs_count");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("phone_number");
+    localStorage.removeItem("address");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("bio");
+    localStorage.removeItem("user_image");
   }, []);
 
   return (
@@ -186,19 +196,29 @@ const Home = () => {
                 height: "calc(100vh - 400px)", // Subtract the height of the header
               }}
             >
-              <Alert message={error} type="error" />
+              <div>
+                <Alert message={error} type="error" />
+                <Button
+                  style={{ marginTop: "10px" }}
+                  onClick={() => window.location.reload()}
+                >
+                  {" "}
+                  Reload Again{" "}
+                </Button>
+              </div>
+              <div></div>
             </div>
           ) : (
             <>
               <Row style={{ display: "flex", alignItems: "center" }}>
                 <Row style={{ display: "flex", alignItems: "center" }}>
-                  <Col xs={24} md={7}>
+                  <Col xs={7} md={7}>
                     <img
                       alt=""
                       src={
                         blogBannerData
                           ? `http://127.0.0.1:8000${blogBannerData.image}`
-                          : "https://unsplash.it/700"
+                          : "https://assets-v2.lottiefiles.com/a/0e30b444-117c-11ee-9b0d-0fd3804d46cd/BkQxD7wtnZ.gif"
                       }
                       style={{
                         width: "100%",
@@ -208,7 +228,7 @@ const Home = () => {
                     />
                   </Col>
 
-                  <Col xs={24} md={17}>
+                  <Col xs={17} md={17}>
                     {blogBannerData && (
                       <>
                         <div style={{ padding: "2%  5%" }}>
@@ -277,11 +297,16 @@ const Home = () => {
                               }}
                             >
                               <h3>{blog.title}</h3>
-                              <p
-                                style={{ height: "100px", overflow: "hidden" }}
-                              >
-                                {blog.description}
+                              <p>
+                                {blog.description
+                                  .split(" ")
+                                  .slice(0, 50)
+                                  .join(" ") +
+                                  (blog.description.split(" ").length > 50
+                                    ? " ..."
+                                    : "")}
                               </p>
+
                               <span>
                                 <b>{blog.username}</b> &nbsp;
                                 <span>
@@ -305,7 +330,17 @@ const Home = () => {
                       ))
                     ) : (
                       <Col span={24}>
-                        <p>No random blogs to show</p>
+                        <div>
+                          <Alert message={error} type="error" />
+                          <Button
+                            style={{ marginTop: "10px" }}
+                            onClick={() => window.location.reload()}
+                          >
+                            {" "}
+                            Reload Again{" "}
+                          </Button>
+                        </div>
+                        <div></div>
                       </Col>
                     )}
                   </Col>
@@ -316,7 +351,7 @@ const Home = () => {
                       background: "#fff",
                       borderRadius: "8px",
                       margin: "10px 0",
-                      height: "calc(100vh - 150px)",
+                      // height: "calc(100vh - 150px)",
                       overflow: "hidden",
                     }}
                   >
@@ -377,29 +412,34 @@ const Home = () => {
                       ))
                     ) : (
                       <Col span={24}>
-                        <p>No recent blogs to show</p>
+                        <p></p>
+                        <Alert message="No recent blogs to show" type="error" />
+                        <br />
                       </Col>
                     )}
                   </Col>
                 </Row>
-
-                <div style={{ textAlign: "left", marginTop: "20px" }}>
-                  {isAdditionalVisible ? (
-                    <Button
-                      icon={<ArrowLeftOutlined />}
-                      onClick={handleToggleVisibility}
-                    >
-                      You Must Login/Signup to view more
-                    </Button>
-                  ) : (
-                    <Button
-                      icon={<ArrowRightOutlined />}
-                      onClick={handleToggleVisibility}
-                    >
-                      View More
-                    </Button>
-                  )}
-                </div>
+                {totalBlogsPosted && totalBlogsPosted > 0 ? (
+                  <div style={{ textAlign: "left", marginTop: "20px" }}>
+                    {isAdditionalVisible ? (
+                      <Button
+                        icon={<ArrowLeftOutlined />}
+                        onClick={handleToggleVisibility}
+                      >
+                        You Must Login/Signup to view more
+                      </Button>
+                    ) : (
+                      <Button
+                        icon={<ArrowRightOutlined />}
+                        onClick={handleToggleVisibility}
+                      >
+                        View More
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  <> </>
+                )}
               </>
               <br />
               <br />
@@ -432,9 +472,9 @@ const Home = () => {
                         {" "}
                         {totalBlogsPosted}
                         <span
-                          style={{ fontSize: "64px", margin: 0, padding: 0 }}
+                          style={{ fontSize: "76px", margin: 0, padding: 0 }}
                         >
-                          +
+                          <sup>+ </sup>
                         </span>{" "}
                       </span>
                     </h1>

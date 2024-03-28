@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Spin, Row, Col, Typography, Image, Layout } from "antd";
+import { Spin, Row, Col, Typography, Image, Layout, Button, Alert } from "antd";
 import AppHeader from "../../../header/publicHeader";
 import AppFooter from "../../../footer/footer";
 
@@ -11,6 +11,7 @@ const PublicBlogDetails = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchBlogDetails = async () => {
@@ -24,6 +25,7 @@ const PublicBlogDetails = () => {
             "Error fetching blog details. HTTP Status:",
             response.status
           );
+          setError("Failed to fetch blog details");
           return;
         }
 
@@ -37,12 +39,17 @@ const PublicBlogDetails = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching blog details:", error);
+        setError("Failed to fetch blog details");
         setLoading(false);
       }
     };
 
     fetchBlogDetails();
   }, [id]);
+
+  const handleReload = () => {
+    window.location.reload();
+  };
 
   if (loading) {
     return <Spin />;
@@ -51,44 +58,63 @@ const PublicBlogDetails = () => {
   return (
     <>
       <AppHeader />
-      {/* Content inside Layout with 10% padding */}
-      <Content className="ant-container">
-        <Row>
-          <Col span={24}>
-            <Title>{details.title}</Title>
-            <Text>
-              {new Date(details.created_at).toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </Text>
-            <br />
-
-            <div style={{ textAlign: "center" }}>
-              <Image
-                src={details.image}
-                alt="Blog Image"
-                style={{ maxWidth: "100%", width: "500px" }}
-              />
-            </div>
-
-            <br />
-
-            {/* Render other details as needed */}
-            <Text size="large" style={{ fontSize: "19px" }}>
-              {details.description.split("\r\n").map((paragraph, index) => (
-                <React.Fragment key={index}>
-                  {paragraph}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "80vh",
+        }}
+      >
+        {error ? (
+          <div>
+            <Alert message={error} type="error" />
+            <Button style={{ marginTop: "10px"}}  onClick={handleReload}> Reload Again </Button>
+          </div>
+        ) : (
+          <Content className="ant-container">
+            <Row>
+              <Col span={24}>
+                <>
+                  <Title>{details.title}</Title>
+                  <Text>
+                    {new Date(details.created_at).toLocaleString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                    &nbsp;| {details.username}
+                  </Text>
                   <br />
-                </React.Fragment>
-              ))}
-            </Text>
-          </Col>
-        </Row>
-      </Content>{" "}
-      <br />
-      <br />
+
+                  <div style={{ textAlign: "center" }}>
+                    <Image
+                      src={details.image}
+                      alt="Blog Image"
+                      style={{ maxWidth: "100%", width: "500px" }}
+                    />
+                  </div>
+
+                  <br />
+
+                  {/* Render other details as needed */}
+                  <Text size="large" style={{ fontSize: "19px" }}>
+                    {details.description.split("\r\n").map((paragraph, index) => (
+                      <React.Fragment key={index}>
+                        {paragraph}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </Text>
+                </>
+              </Col>
+            </Row>
+          </Content>
+        )}
+      </div>
       <AppFooter />
     </>
   );

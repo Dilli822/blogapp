@@ -621,7 +621,7 @@ const UserProfile = () => {
                               overflow: "hidden",
                               border: "1px solid #d9d9d9",
                               borderRadius: "5px",
-                              margin: "0",
+                              marginTop: "2%",
                               padding: "1%",
                               boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);",
                             }}

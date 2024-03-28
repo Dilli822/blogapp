@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Spin, Row, Col, Typography, Image, Layout, Alert } from "antd";
+import { Spin, Row, Button, Col, Typography, Image, Layout, Alert } from "antd";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
 
@@ -42,7 +42,7 @@ const Details = () => {
 
   return (
     <>
-      <AppHeader />
+                <div>         <AppHeader /></div>
       <div
         style={{
           display: "flex",
@@ -54,22 +54,36 @@ const Details = () => {
         {isLoading ? (
           <Spin size="large" />
         ) : error ? (
-          <Alert message={error} type="error" />
+          <div>
+            <Alert message={error} type="error" />
+            <Button
+              style={{ marginTop: "10px" }}
+              onClick={() => window.location.reload()}
+            >
+              {" "}
+              Reload Again{" "}
+            </Button>
+          </div>
         ) : (
           <>
-            <Content  className="ant-container">
+
+            <Content className="ant-container">
               <Row>
                 <Col span={24}>
                   <Title>{details.title}</Title>
-                  <Text>{new Date(details.created_at).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })} 
-                  &nbsp; | {details.username}{" "}
+                  <Text>
+                    {new Date(details.created_at).toLocaleString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                    &nbsp; | {details.username}{" "}
                   </Text>
                   <Text>
-                    <p>
-                      {" "}
-                      {/* {details.user} | */}
-              
-                    </p>
+                    <p> {/* {details.user} | */}</p>
                   </Text>
                   <br />
 

@@ -58,14 +58,18 @@ function WeatherForecast() {
     if (timeOfDay === "night") {
       gifMap = {
         // clouds: "https://i.pinimg.com/originals/b0/45/fc/b045fc647b6a4a4bc2dd3d31f4a948ef.gif",
-        clouds: "https://i.pinimg.com/originals/17/43/59/174359d6c7e31330affd9322a828e20b.gif",
+        clouds:
+          "https://i.pinimg.com/originals/17/43/59/174359d6c7e31330affd9322a828e20b.gif",
         rain: "https://i.pinimg.com/originals/0e/db/60/0edb6064ea5e7fc57bd7159e94aad20c.gif",
-        clear: "https://i.pinimg.com/originals/3d/29/18/3d291877ec002841315d22d08a125374.gif",
+        clear:
+          "https://i.pinimg.com/originals/3d/29/18/3d291877ec002841315d22d08a125374.gif",
       };
     } else {
       gifMap = {
-        clear: "https://www.shutterstock.com/image-photo/blue-sky-600nw-173509772.jpg",
-        clouds: "https://www.icegif.com/wp-content/uploads/2023/08/icegif-886.gif",
+        clear:
+          "https://www.shutterstock.com/image-photo/blue-sky-600nw-173509772.jpg",
+        clouds:
+          "https://www.icegif.com/wp-content/uploads/2023/08/icegif-886.gif",
         rain: "https://media2.giphy.com/media/Q5kC7hjJQOHTUzDJnw/giphy.gif",
         sunny: "https://i.gifer.com/68J.gif",
       };
@@ -79,18 +83,18 @@ function WeatherForecast() {
       <h2>Weather Forecast</h2>
       {weatherData ? (
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div>
+          <div style={{ width: "100%" }}>
             <p>City: {weatherData.name}</p>
             <p>Temperature: {weatherData.main.temp}°C</p>
             <p>Description: {weatherData.weather[0].description}</p>
             <p>Time of Day: {timeOfDay}</p>
           </div>
-          <div>
+          <div style={{ width: "100%" }}>
             {weatherGif && (
               <img
                 src={weatherGif}
                 alt="Weather GIF"
-                style={{ maxWidth: "100%", width: "350px" , marginLeft: "2rem"}}
+                style={{ maxWidth: "100%", width: "100%", borderRadius: "7px" }}
               />
             )}
           </div>

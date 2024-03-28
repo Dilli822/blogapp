@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Layout,
@@ -42,7 +43,7 @@ const Create = () => {
   const [imageFile, setImageFile] = useState(null);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(true); // Assuming the user is logged in initially
   const [error, setError] = useState(null);
 
   const handleHeaderChange = (e) => {
@@ -51,8 +52,8 @@ const Create = () => {
 
   const handleParagraphChange = (e) => {
     setParagraph(e.target.value);
-    console.log(e.target.value);
   };
+
   const handlePostBlog = () => {
     // Check if the title meets the minimum length requirement
     if (header.length < 5) {
@@ -78,8 +79,6 @@ const Create = () => {
     if (imageFile) {
       formData.append("image", imageFile);
     }
-
-    console.log("completed form data ", FormData);
 
     fetch("http://127.0.0.1:8000/blog/api/blog-details/", {
       method: "POST",
@@ -162,11 +161,19 @@ const Create = () => {
   };
 
   useEffect(() => {
-    setIsLoading(false);
-  });
+    // Assuming you're checking user authentication here
+    if (
+      !localStorage.getItem("user_name") ||
+      !localStorage.getItem("user_id")
+    ) {
+      setIsLogged(false);
+    }
 
-  if (!localStorage.getItem("user_name") && !localStorage.getItem("user_id")) {
-    setIsLogged(false);
+    // Set loading to false after initial render
+    setIsLoading(false);
+  }, []); // empty dependency array means it runs only once after the initial render
+
+  if (!isLogged) {
     return <Forbidden />;
   }
 
@@ -224,7 +231,6 @@ const Create = () => {
                   />
                 )}
               </div>
-              {/* <div style={{ display: "flex", alignItems: "center" }}> */}
               <div style={{ display: "block", alignItems: "center" }}>
                 <h3>Upload Picture/Image for your Blog</h3>
                 &nbsp;&nbsp;
