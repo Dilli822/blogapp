@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from django.db.models.functions import ExtractYear
 from django.utils import timezone
 from django.db.models import Q
+from datetime import timedelta
 
 class BlogDetailsListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -84,7 +85,7 @@ class LatestLimitBlog(generics.ListCreateAPIView):
         current_year = timezone.now().year
 
         # Filter the latest four blogs for the current year
-        latest_blogs = BlogDetails.objects.filter(date__year=current_year).order_by('-date')[:4]
+        latest_blogs = BlogDetails.objects.filter(date__year=current_year).order_by('-date')[:5]
 
         if latest_blogs:
             serializer = self.serializer_class(latest_blogs, many=True)
@@ -97,15 +98,17 @@ class LatestOpenRecentBlogs(generics.ListCreateAPIView):
     serializer_class = BlogDetailsSerializer
 
     def get(self, request, *args, **kwargs):
-        # Get the latest four blogs from the database
-        latest_blogs = BlogDetails.objects.order_by('-id')[:4]
+        # Calculate the date one month ago from today
+        one_month_ago = timezone.now() - timedelta(days=30)
+        
+        # Filter blogs posted within the last month
+        recent_blogs = BlogDetails.objects.filter(date__gte=one_month_ago).order_by('-date')[:6]
 
-        if latest_blogs:
-            serializer = self.serializer_class(latest_blogs, many=True)
+        if recent_blogs:
+            serializer = self.serializer_class(recent_blogs, many=True)
             return Response(serializer.data)
         else:
-            return Response({"detail": "No blog posts found in the database."})
-        
+            return Response({"detail": "No recent blog posts found."})
         
 class TotalBlogsCountAPIView(generics.ListCreateAPIView):
     serializer_class = TotalBlogsCountSerializer  # Define the serializer class

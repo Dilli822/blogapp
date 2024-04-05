@@ -25,7 +25,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/account/password-reset-email/",
+        " https://web-production-4cd0.up.railway.app/account/password-reset-email/",
         {
           method: "POST",
           headers: {

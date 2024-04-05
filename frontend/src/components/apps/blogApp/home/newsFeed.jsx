@@ -356,6 +356,15 @@ const NewsFeed = ({
                           >
                             <div style={{ height: "auto", overflow: "hidden" }}>
                               <h4>{blogItem.title} </h4>
+                              <p>
+                        {blogItem.description
+                          .split(" ")
+                          .slice(0, 10)
+                          .join(" ") +
+                          (blogItem.description.split(" ").length > 10
+                            ? " ..."
+                            : "")}
+                      </p>{" "}
                             </div>
                           </Card>
                         </Link>
@@ -395,9 +404,9 @@ const NewsFeed = ({
                       <p>
                         {blogItem.description
                           .split(" ")
-                          .slice(0, 20)
+                          .slice(0, 5)
                           .join(" ") +
-                          (blogItem.description.split(" ").length > 50
+                          (blogItem.description.split(" ").length > 5
                             ? " ..."
                             : "")}
                       </p>{" "}

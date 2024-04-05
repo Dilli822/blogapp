@@ -147,7 +147,7 @@ const UserProfile = () => {
         // Update the state immediately with the new image
         setFirstUserImg({ image: responseData.image });
         // Show success message
-        message.success("Image updated successfully");
+        message.success("Profile updated successfully");
       } else {
         // Handle image update error
         console.error("Error updating user details with image");
@@ -675,6 +675,7 @@ const UserProfile = () => {
           </Layout>
         </div>
       )}
+      <br />
 
       <AppFooter />
     </>

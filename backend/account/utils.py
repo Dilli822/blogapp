@@ -26,7 +26,7 @@ def send_email_view(request, email):
     user_details.save()
 
     # Compose email message
-    subject = 'Password Reset Link From E-com'
+    subject = 'Password Reset Link From Blog App'
 
     # Compose email message using HTML template
     html_content = f"""

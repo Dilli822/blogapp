@@ -17,7 +17,7 @@ const PasswordResetPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/account/update-password/`,
+        ` https://web-production-4cd0.up.railway.app/account/update-password/`,
         {
           method: "POST",
           headers: {

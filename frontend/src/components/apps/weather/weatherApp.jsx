@@ -70,6 +70,7 @@ function WeatherForecast() {
           "https://www.shutterstock.com/image-photo/blue-sky-600nw-173509772.jpg",
         clouds:
           "https://www.icegif.com/wp-content/uploads/2023/08/icegif-886.gif",
+        clouds: "https://mir-s3-cdn-cf.behance.net/project_modules/disp/c81fed16071075.562a501d5e911.gif",
         rain: "https://media2.giphy.com/media/Q5kC7hjJQOHTUzDJnw/giphy.gif",
         sunny: "https://i.gifer.com/68J.gif",
       };

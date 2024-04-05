@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Layout, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
-import logoImage from "../img/logo/blogCofffee.jpg";
-
+// import logoImage from "../img/logo/blogCofffee.jpg";
+import logoImage from "../img/about/logo.jpeg";
 const { Header } = Layout;
 
 const PublicAppHeader = () => {

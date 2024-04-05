@@ -17,7 +17,7 @@ const Signup = () => {
 
       // Use the register API endpoint
       const response = await fetch(
-        "http://127.0.0.1:8000/account/api/register/",
+        " https://web-production-4cd0.up.railway.app/account/api/register/",
         {
           method: "POST",
           headers: {

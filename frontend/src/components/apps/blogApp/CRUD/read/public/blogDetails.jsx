@@ -115,6 +115,8 @@ const PublicBlogDetails = () => {
           </Content>
         )}
       </div>
+      <br></br>
+      <br></br>
       <AppFooter />
     </>
   );

@@ -56,7 +56,7 @@ const Home = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/blog/api/latest-blog/"
+        " https://web-production-4cd0.up.railway.app/blog/api/latest-blog/"
       );
       if (response.ok) {
         const data = await response.json();
@@ -80,7 +80,7 @@ const Home = () => {
   const fetchRandomBlogsData = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/blog/api/random-blogs/"
+        " https://web-production-4cd0.up.railway.app/blog/api/random-blogs/"
       );
       if (response.ok) {
         const data = await response.json();
@@ -104,7 +104,7 @@ const Home = () => {
   const fetchRecentBlogsData = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/blog/api/random-recentBlogs/"
+        " https://web-production-4cd0.up.railway.app/blog/api/random-recentBlogs/"
       );
       if (response.ok) {
         const data = await response.json();
@@ -128,7 +128,7 @@ const Home = () => {
   const fetchTotalBlogsData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/blog/api/total-blogs-count/"
+        " https://web-production-4cd0.up.railway.app/blog/api/total-blogs-count/"
       );
       if (response.ok) {
         const data = await response.json();
@@ -213,7 +213,7 @@ const Home = () => {
               <Row style={{ display: "flex", alignItems: "center" }}>
                 <Row style={{ display: "flex", alignItems: "center" }}>
                   <Col xs={7} md={7}>
-                    <img
+                    {/* <img
                       alt=""
                       src={
                         blogBannerData
@@ -224,8 +224,24 @@ const Home = () => {
                         width: "100%",
                         border: "1px solid #ccc",
                         borderRadius: "8px",
-                      }}
+                      }} 
                     />
+                    */}
+                    <img
+                      alt=""
+                      src={
+                        blogBannerData
+                          ? `h https://web-production-4cd0.up.railway.app${blogBannerData.image}`
+                          : "https://assets-v2.lottiefiles.com/a/0e30b444-117c-11ee-9b0d-0fd3804d46cd/BkQxD7wtnZ.gif"
+                      }
+                      style={{
+                        width: "100%",
+                        border: "1px solid #ccc",
+                        borderRadius: "8px",
+                      }} 
+                    />
+
+                   
                   </Col>
 
                   <Col xs={17} md={17}>
@@ -261,9 +277,9 @@ const Home = () => {
               <>
                 <br />
 
-                <h1 style={{ textAlign: "left" }}> Blog & Articles </h1>
                 <Row gutter={24}>
                   <Col md={17} style={{}}>
+                    <h1 style={{ textAlign: "left" }}> Blog & Articles </h1>
                     {Array.isArray(randomBlogsData) &&
                     randomBlogsData.length > 0 ? (
                       randomBlogsData.map((blog) => (
@@ -348,14 +364,13 @@ const Home = () => {
                   <Col
                     md={7}
                     style={{
-                      background: "#fff",
                       borderRadius: "8px",
                       margin: "10px 0",
                       // height: "calc(100vh - 150px)",
                       overflow: "hidden",
                     }}
                   >
-                    <h2>Recent </h2>
+                    <h2> Recent </h2>
                     <hr />
 
                     {Array.isArray(recentBlogsData) &&

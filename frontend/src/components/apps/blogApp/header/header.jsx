@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 // import logoImage from "../img/logo/B-logo.png"
 // import logoImage from "../img/logo/BlogLogo.png"
 // import logoImage from "../img/logo/BlogApp.jpg"
-import logoImage from "../img/logo/blogCofffee.jpg";
+// import logoImage from "../img/logo/blogCofffee.jpg";
+import logoImage from "../img/about/logo.jpeg";
 
 const { Header } = Layout;
 const { Content } = Layout;

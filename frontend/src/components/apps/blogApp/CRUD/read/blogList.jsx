@@ -269,7 +269,6 @@ const BlogList = () => {
               <div
                 style={{
                   display: "block",
-                  height: "150px",
                   overflow: "hidden",
                 }}
               >
@@ -281,7 +280,15 @@ const BlogList = () => {
                   style={{ width: "50px" }}
                 />
                 <h2> {item.title}</h2>
-                <p> {item.description} </p>
+                <p>
+                        {item.description
+                          .split(" ")
+                          .slice(0, 50)
+                          .join(" ") +
+                          (item.description.split(" ").length > 50
+                            ? " ..."
+                            : "")}
+                      </p>{" "}
               </div>
             </List.Item>
           )}
@@ -293,7 +300,7 @@ const BlogList = () => {
         visible={editModalVisible}
         onCancel={() => setEditModalVisible(false)}
         footer={null} // No footer for simplicity, you can customize it
-        width="70%" 
+        width="70%"
       >
         <Layout style={{ padding: "3%" }}>
           <Col>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Roboto:wght@100;400&display=swap");
+
+        body {
+            word-spacing: 1px;
+
+        }
+
+        .path-cont {
+            position: fixed;
+            width: 20vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            /* color: #FBF7F490; */
+            color: #15151590;
+            z-index: -10;
+        }
+
+        .svgpath {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+        }
+
+        .svgpath path {
+            /* stroke: #FBF7F430; */
+            stroke: #00a70e;
+        }
+
+        .obj {
+            position: absolute;
+            offset-path: polygon(51% 0%, 61% 7%, 69% 12%, 74% 18%, 72% 25%, 62% 29%, 45% 32%, 29% 32%, 13% 26%, 20% 19%, 37% 15%, 56% 15%, 68% 17%, 80% 24%, 82% 31%, 76% 37%, 67% 43%, 57% 49%, 44% 55%, 35% 60%, 26% 66%, 25% 70%, 30% 75%, 36% 81%, 46% 86%, 55% 91%, 65% 96%, 72% 99%);
+            animation: followpath linear;
+            animation-timeline: scroll();
+        }
+
+        @keyframes followpath {
+            from {
+                offset-distance: 2%;
+            }
+
+            to {
+                offset-distance: 60%;
+            }
+        }
+
+        body {
+            background-color: #eaeaea;
+            color: #151515e0;
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+        }
+
+        h1 {
+            font-family: "Architects Daughter", cursive;
+            font-size: clamp(2rem, 8vw + 1rem, 10rem);
+            line-height: 1;
+            margin: 0;
+            background-image: linear-gradient(#ff6090, #E23636);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        p {
+            line-height: 1.5;
+
+        }
+
+        .big-thing {
+            width: min(80ch, 100% - 3rem);
+            margin: 0 auto;
+        }
+
+        .obj {
+            --bg: rgb(255, 255, 255);
+            --brd: #ff6060;
+            width: 3vmin;
+            height: 1.5vmin;
+            border-top-right-radius: 30% 20%;
+            border-bottom-right-radius: 30% 20%;
+            border-top-left-radius: 30% 15%;
+            border-bottom-left-radius: 30% 15%;
+            border: 1px solid var(--brd);
+            border-width: 0.5vmin 2.5vmin 0.5vmin 0.8vmin;
+            box-shadow: 0 0 0 0.08em #000;
+            background-color: var(--bg);
+        }
+
+        .path-cont:before {
+            content: "0%";
+            position: absolute;
+            left: 40%;
+        }
+
+        .path-cont:after {
+            content: "100%";
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+
+        a {
+            color: #ff6090;
+            text-decoration-color: #ffafaf90;
+        }
+    </style>
+
+    <script>
+        window.console = window.console || function (t) { };
+    </script>
+
+
+
+</head>
+
+<body translate="no" data-new-gr-c-s-check-loaded="14.1061.0" data-gr-ext-installed="">
+    <div class="path-cont">
+        <svg class="svgpath" preserveAspectRatio="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path fill="none" stroke-dasharray="5,3" stroke="#0070f3"
+                d="M51,0 L61,7 L69,12 L74,18 L72,25 L62,29 L45,32 L29,32 L13,26 L20,19 L37,15 L56,15 L68,17 L80,24 L82 31 L76,37 L67,43 L57,49 L44,55 L35,60 L26,66 L25,70 L30,75 L36,81 L46,86 L55,91 L65,96 L72,99">
+            </path>
+        </svg>
+        <div class="obj"></div>
+    </div>
+
+    <div class="big-thing"></div>
+
+    <footer>
+        <h6 style="text-align: right;">
+            This Web Page UI/UX Design is Powered by Codepen.io
+            <a href="https://codepen.io/ghaste" target="_blank">Amit</a>
+        </h6>
+    </footer>
+
+    <script>
+        // const jsonData = [
+        //     { 
+        //         "type": "h1",
+        //         "content": "DFS"
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "<strong>Sadly no love in firefox and safari yet for animation timeline, have to wait on such implementations.</strong>"
+        //     },
+        //     { 
+        //         "type": "iframe",
+        //         "content": ""
+        //     },
+
+        //     { 
+        //         "type": "p",
+        //         "content": "<a href='https://codepen.io/ghaste/pen/PoVWgZp' target='_blank'>SVG path </a>based offset-path does not support responsive design, which is another draw-back."
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "You can use a <strong>polygon path</strong>, which is responsive, but you will then have to create that visible path yourself (intentionally terrible job here). It will not be a smooth path as shown here."
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "I found that the <a href='https://bennettfeely.com/clippy/' target='_blank'>Clippy</a> - clip-path generator can be used for generating the polygon."
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "A reflex agent is a type of artificial intelligence (AI) agent that makes decisions based solely on the current state of the environment, without considering the history of past states. It reacts to sensory input using predefined rules or conditions. A vacuum cleaner can be considered a simple reflex agent, especially if it operates based on basic sensor input and a set of predefined rules."
+        //     },
+
+        //     { 
+        //         "type": "separator" // Separator between the two sets of data
+        //     },
+
+        //     { 
+        //         "type": "h1",
+        //         "content": "BFS"
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "<strong>Sadly no love in firefox and safari yet for animation timeline, have to wait on such implementations.</strong>"
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "<a href='https://codepen.io/ghaste/pen/PoVWgZp' target='_blank'>SVG path </a>based offset-path does not support responsive design, which is another draw-back."
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "You can use a <strong>polygon path</strong>, which is responsive, but you will then have to create that visible path yourself (intentionally terrible job here). It will not be a smooth path as shown here."
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "I found that the <a href='https://bennettfeely.com/clippy/' target='_blank'>Clippy</a> - clip-path generator can be used for generating the polygon."
+        //     },
+        //     { 
+        //         "type": "p",
+        //         "content": "A reflex agent is a type of artificial intelligence (AI) agent that makes decisions based solely on the current state of the environment, without considering the history of past states. It reacts to sensory input using predefined rules or conditions. A vacuum cleaner can be considered a simple reflex agent, especially if it operates based on basic sensor input and a set of predefined rules."
+        //     }
+        // ];
+
+        const jsonData = [
+            {
+                "type": "h1",
+                "content": " AI Agent",
+                "class": "hrllo",
+            },
+
+            {
+                "type": "h2",
+                "content": "Simple Reflexive AI Agent ~ Vacuum cleaner"
+            },
+            {
+                "type": "iframe",
+                "content": {
+                    "src": "https://www.youtube.com/embed/6WWCchlZYaw?si=f-ruIULGG3TMWlXP",
+                    "title": "YouTube video player",
+                    "frameborder": "0",
+                    "allow": "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+                    "allowfullscreen": "",
+                    "style": "width: 100%; height: 400px;"
+                }
+            }
+
+
+            ,
+            {
+                "type": "separator"
+            },
+
+            { "type": "separator", },
+            {
+                "type": "paragraph",
+                "content": "A reflex agent is a type of artificial intelligence (AI) agent that makes decisions based solely on the current state of the environment, without considering the history of past states. It reacts to sensory input using predefined rules or conditions. A vacuum cleaner can be considered a simple reflex agent, especially if it operates based on basic sensor input and a set of predefined rules."
+            },
+
+
+            {
+                "type": "list",
+                "content": [
+                    "Here's how a simple reflex agent model might work for a vacuum cleaner: <br>",
+                    "Percept:",
+                    "The vacuum cleaner's sensors detect the current state of the environment, which includes information about whether a particular location is dirty or clean.",
+                    "Action:",
+                    "If the current location is dirty, the vacuum cleaner performs the 'suck' action to clean the area.",
+                    "If the current location is clean, the vacuum cleaner moves to the next location."
+                ]
+            },
+            {
+                "type": "separator"
+            }
+            ,
+
+            {
+                "type": "paragraph",
+                "content": "Rule:"
+            },
+            {
+                "type": "list",
+                "content": [
+                    "\"If the current location is dirty, then suck.\"",
+                    "\"If the current location is clean, then move to the next location.\"",
+                    "This simple reflex agent operates based on a direct mapping between percept and action. It doesn't have memory or the ability to learn from past experiences. Its decision-making is determined solely by the immediate state of the environment."
+                ]
+            },
+            {
+                "type": "paragraph",
+                "content": "While this basic model may work for scenarios with a limited and predictable environment (e.g., a small room with known dirt locations), more sophisticated AI techniques, such as model-based or learning-based approaches, might be necessary for complex environments where the state is dynamic and uncertain."
+            },
+            {
+                "type": "separator"
+            },
+            {
+                "type": "heading",
+                "content": "Code"
+            },
+            {
+                "type": "nbsp",
+            },
+            {
+                "type": "paragraph",
+                "content": "GitHub Code Link:"
+            },
+            {
+                "type": "nbsp",
+            }, {
+                "type": "nbsp",
+            }
+
+            ,
+
+            {
+                "type": "a",
+                "content": {
+                    "href": "https://github.com/Dilli822/Godawari-College/tree/main/4thSemester/AI/Projects/vaccum_cleaner.py",
+                    "text": "Source Code ~ Click Here"
+                }
+            }
+            ,
+
+            {
+                "type": "code",
+                "content": "import tkinter as tk\nfrom tkinter import ttk\nimport time\n\nclass VacuumCleaner:\n    CLEAN = 'Clean'\n    DIRTY = 'Dirty'\n\n    def __init__(self, root):\n        self.root = root\n        self.root.title(\"Vacuum Cleaner App\")\n\n        # Initialize user input variables\n        self.current_location_var = tk.StringVar()\n        self.room_a_status_var = tk.StringVar()\n        self.room_b_status_var = tk.StringVar()\n\n        # Create entry widgets for user input\n        tk.Label(root, text=\"Current Location of Vacuum Cleaner (A or B):\").pack()\n        tk.Entry(root, textvariable=self.current_location_var).pack()\n\n        tk.Label(root, text=\"Room A Status:\").pack()\n        self.room_a_dropdown = ttk.Combobox(root, textvariable=self.room_a_status_var, values=[self.CLEAN, self.DIRTY])\n        self.room_a_dropdown.pack()\n        self.room_a_dropdown.set(self.CLEAN)  # Set default value\n\n        tk.Label(root, text=\"Room B Status:\").pack()\n        self.room_b_dropdown = ttk.Combobox(root, textvariable=self.room_b_status_var, values=[self.CLEAN, self.DIRTY])\n        self.room_b_dropdown.pack()\n        self.room_b_dropdown.set(self.DIRTY)  # Set default value\n\n        # Create a button to trigger the cleaning process\n        self.clean_button = tk.Button(root, text=\"Clean\", command=self.run)\n        self.clean_button.pack()\n\n        # Create canvas to display environment\n        self.canvas = tk.Canvas(root, width=600, height=300)  # Increased canvas size\n        self.canvas.pack()\n\n        # Create label to display status\n        self.status_label = tk.Label(root, text=\"\")\n        self.status_label.pack()\n\n        # Initialize vacuum cleaner variable\n        self.vacuum_cleaner = None\n\n    def draw_environment(self):\n        self.canvas.delete(\"all\")\n\n        for room, status_var in [('A', self.room_a_status_var), ('B', self.room_b_status_var)]:\n            status = status_var.get()\n            color = \"green\" if status == self.CLEAN else \"red\"\n            x1, y1, x2, y2 = 75 if room == 'A' else 325, 50, 225 if room == 'A' else 475, 250  # Adjusted coordinates and increased room sizes\n            self.canvas.create_rectangle(x1, y1, x2, y2, fill=color)\n            \n            label_x = (x1 + x2) / 2\n            label_y = y1 + 150\n            label_color = \"white\"  # Set the text color for room labels\n            label_size = 12  # Set the text size for room labels\n            self.canvas.create_text(label_x, label_y, text=f\"Room {room} ({status})\", font=('Arial', label_size, 'bold'), fill=label_color)\n\n        if self.vacuum_cleaner:\n            # Adjusted coordinates for the smaller vacuum cleaner\n            x1, y1, x2, y2 = self.vacuum_cleaner\n            vacuum_width = x2 - x1\n            vacuum_height = y2 - y1\n\n            # Draw the vacuum cleaner body\n            self.canvas.create_rectangle(x1, y1, x2, y2, fill=\"gray\")\n\n            # Draw the front wheel\n            wheel_radius = vacuum_width // 10\n            wheel_x, wheel_y = x1 + vacuum_width // 4, y2 - wheel_radius - 5\n            self.canvas.create_oval(wheel_x - wheel_radius, wheel_y - wheel_radius, wheel_x + wheel_radius, wheel_y + wheel_radius, fill=\"black\")\n\n            # Draw the back wheel\n            wheel_x = x1 + 3 * vacuum_width // 4\n            self.canvas.create_oval(wheel_x - wheel_radius, wheel_y - wheel_radius, wheel_x + wheel_radius, wheel_y + wheel_radius, fill=\"black\")\n\n            # Draw the suction pipe\n            pipe_width = vacuum_width // 20\n            pipe_length = vacuum_height // 2\n            pipe_x1, pipe_y1 = x1 + vacuum_width // 2, y1 + vacuum_height // 2\n            pipe_x2, pipe_y2 = pipe_x1, pipe_y1 - pipe_length\n            self.canvas.create_line(pipe_x1, pipe_y1, pipe_x2, pipe_y2, width=pipe_width, fill=\"darkgray\")\n\n            # Draw the handle\n            handle_width = vacuum_width // 20\n            handle_height = vacuum_height // 4\n            handle_x, handle_y = x1 + vacuum_width // 2 - handle_width // 2, y1 - handle_height\n            self.canvas.create_rectangle(handle_x, handle_y, handle_x + handle_width, handle_y + handle_height, fill=\"darkgray\")\n\n            # Draw the text label for the vacuum cleaner\n            label_x = (x1 + x2) / 2\n            label_y = (y1 + y2) / 2\n            self.canvas.create_text(label_x, label_y, text=\"Vacuum Cleaner\", font=('Arial', 10, 'bold'), fill=\"white\")\n\n        self.root.update()\n\n    def scan_and_clean(self, room):\n        if room == 'A':\n            status_var = self.room_a_status_var\n        elif room == 'B':\n            status_var = self.room_b_status_var\n        else:\n            return False\n\n        if status_var.get() == self.DIRTY:\n            status_var.set(self.CLEAN)\n            return True\n        else:\n            return False\n\n    def move_left(self):\n        self.current_location = 'A'\n\n    def move_right(self):\n        self.current_location = 'B'\n\n    def update_status_label(self, message):\n        self.status_label.config(text=message)\n        self.root.update()\n\n    def run(self):\n        # Get user input values\n        self.current_location = self.current_location_var.get().upper()\n\n        # Cleaning process\n        while any(status_var.get() == self.DIRTY for status_var in [self.room_a_status_var, self.room_b_status_var]):\n            while self.scan_and_clean(self.current_location):\n                self.draw_environment()\n                self.update_status_label(f\"Cleaning in Room {self.current_location}...\")\n                time.sleep(1)\n\n            if self.current_location == 'A':\n                self.move_right()\n            else:\n                self.move_left()\n\n            # Adjusted coordinates for the smaller vacuum cleaner\n            self.vacuum_cleaner = (150 if self.current_location == 'A' else 400, 80, 200 if self.current_location == 'A' else 450, 140)\n            self.draw_environment()\n            self.update_status_label(f\"Moving to Room {self.current_location}...\")\n            time.sleep(1)\n\n        self.draw_environment()\n        self.update_status_label(\"All rooms are clean. Task completed.\")\n\nif __name__ == \"__main__\":\n    root = tk.Tk()\n    vacuum = VacuumCleaner(root)\n    root.mainloop()"
+            },
+
+
+
+        ]
+
+        const bigThing = document.querySelector('.big-thing');
+        const body = document.querySelector('body');
+
+        async function populateBigThing() {
+            for (let i = 0; i < jsonData.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 0)); // Simulate asynchronous behavior
+                const { type, content } = jsonData[i];
+                const element = document.createElement(type);
+
+                if (type === 'separator') {
+                    const br = document.createElement('br');
+                    bigThing.appendChild(br);
+                    continue; // Skip the rest of the loop body for separator objects
+                }
+                else if (type === 'code') {
+                    const pre = document.createElement('pre');
+                    const code = document.createElement('code');
+                    code.textContent = content;
+                    pre.style.width = '80%'; // Set width to 100%
+                    pre.style.overflow = 'auto'; // Add overflow auto
+                    pre.appendChild(code);
+                    element.appendChild(pre);
+                }
+                else if (type === 'iframe') {
+                    const iframe = document.createElement('iframe');
+                    const iframeContent = content;
+                    iframe.src = iframeContent.src;
+                    iframe.title = iframeContent.title;
+                    iframe.frameborder = iframeContent.frameborder;
+                    iframe.allow = iframeContent.allow;
+                    iframe.allowfullscreen = iframeContent.allowfullscreen;
+                    iframe.style.cssText = iframeContent.style;
+
+                    bigThing.appendChild(iframe);
+                    continue;
+                }
+
+                else if (type === 'a') {
+                    const anchorElement = document.createElement('a');
+                    console.log('Type:', type);
+                    console.log('Content:', content);
+                    console.log('Content.href:', content.href);
+                    console.log('Content.text:', content.text);
+                    anchorElement.href = content.href;
+                    anchorElement.target = '_blank';
+                    anchorElement.textContent = content.content;
+                    bigThing.appendChild(anchorElement);
+                    continue;
+                }
+
+
+                else if (type === "nbsp") {
+                    const nbsp = document.createElement('span');
+                    nbsp.innerHTML = '&nbsp;';
+                    element.appendChild(nbsp);
+                }
+
+                else {
+                    if (Array.isArray(content)) {
+                        content.forEach(text => {
+                            const paragraph = document.createElement('p');
+                            paragraph.textContent = text;
+                            element.appendChild(paragraph);
+                        });
+                    } else {
+                        element.innerHTML = content;
+                    }
+                }
+
+                bigThing.appendChild(element);
+            }
+        }
+
+        populateBigThing();
+    </script>
+
+    <script>
+        // Function to update the document title based on the URL pathname
+        function updateTitle() {
+            const pageTitle = "Dilli Hang Rai"; // Default title
+            const path = window.location.pathname;
+            const trimmedPath = path.replace(/^\/|\.html$/g, ''); // Remove leading slash and '.html' extension
+
+            // Update the document title with the trimmed path
+            document.title = `${pageTitle} | ${trimmedPath}`;
+        }
+
+        // Call the function when the page loads and whenever the URL changes
+        window.addEventListener('load', updateTitle);
+        window.addEventListener('popstate', updateTitle);
+    </script>
+
+</body>
+
+</html>

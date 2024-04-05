@@ -12,7 +12,7 @@ const Login = () => {
 
   const onFinish = async (values) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/account/api/login/", {
+      const response = await fetch(" https://web-production-4cd0.up.railway.app/account/api/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

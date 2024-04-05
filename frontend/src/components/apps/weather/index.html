@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Dilli Hang Rai | Portfolio </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+        }
+
+        main {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .item {
+            width: 200px;
+            height: 300px;
+            list-style-type: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            background-position: center;
+            background-size: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 30px rgba(255, 255, 255, 0.3) inset;
+            transition: transform 0.1s, left 0.75s, top 0.75s, width 0.75s, height 0.75s;
+
+            &:nth-child(1),
+            &:nth-child(2) {
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                transform: none;
+                border-radius: 0;
+                box-shadow: none;
+                opacity: 1;
+            }
+
+            &:nth-child(3) {
+                left: 50%;
+            }
+
+            &:nth-child(4) {
+                left: calc(50% + 220px);
+            }
+
+            &:nth-child(5) {
+                left: calc(50% + 440px);
+            }
+
+            &:nth-child(6) {
+                left: calc(50% + 660px);
+                opacity: 0;
+            }
+        }
+
+        .content {
+            width: min(30vw, 400px);
+            position: absolute;
+            top: 50%;
+            left: 3rem;
+            transform: translateY(-50%);
+            font: 400 0.85rem helvetica, sans-serif;
+            color: white;
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            display: none;
+
+            & .title {
+                font-family: 'arial-black';
+                text-transform: uppercase;
+            }
+
+            & .description {
+                line-height: 1.7;
+                margin: 1rem 0 1.5rem;
+                font-size: 0.8rem;
+            }
+
+            & button {
+                width: fit-content;
+                background-color: rgba(0, 0, 0, 0.1);
+                color: white;
+                border: 2px solid white;
+                border-radius: 0.25rem;
+                padding: 0.75rem;
+                cursor: pointer;
+            }
+        }
+
+        .item:nth-of-type(2) .content {
+            display: block;
+            animation: show 0.75s ease-in-out 0.3s forwards;
+        }
+
+        @keyframes show {
+            0% {
+                filter: blur(5px);
+                transform: translateY(calc(-50% + 75px));
+            }
+
+            100% {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .nav {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            user-select: none;
+
+            & .btn {
+                background-color: rgba(255, 255, 255, 0.5);
+                color: rgba(0, 0, 0, 0.7);
+                border: 2px solid rgba(0, 0, 0, 0.6);
+                margin: 0 0.25rem;
+                padding: 0.75rem;
+                border-radius: 50%;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.3);
+                }
+            }
+        }
+
+        @media (width > 650px) and (width < 900px) {
+            .content {
+                & .title {
+                    font-size: 1rem;
+                }
+
+                & .description {
+                    font-size: 0.7rem;
+                }
+
+                & button {
+                    font-size: 0.7rem;
+                }
+            }
+
+            .item {
+                width: 160px;
+                height: 270px;
+
+                &:nth-child(3) {
+                    left: 50%;
+                }
+
+                &:nth-child(4) {
+                    left: calc(50% + 170px);
+                }
+
+                &:nth-child(5) {
+                    left: calc(50% + 340px);
+                }
+
+                &:nth-child(6) {
+                    left: calc(50% + 510px);
+                    opacity: 0;
+                }
+            }
+        }
+
+        @media (width < 650px) {
+            .content {
+                & .title {
+                    font-size: 0.9rem;
+                }
+
+                & .description {
+                    font-size: 0.65rem;
+                }
+
+                & button {
+                    font-size: 0.7rem;
+                }
+            }
+
+            .item {
+                width: 130px;
+                height: 220px;
+
+                &:nth-child(3) {
+                    left: 50%;
+                }
+
+                &:nth-child(4) {
+                    left: calc(50% + 140px);
+                }
+
+                &:nth-child(5) {
+                    left: calc(50% + 280px);
+                }
+
+                &:nth-child(6) {
+                    left: calc(50% + 420px);
+                    opacity: 0;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    
+        <main>
+
+            <section>
+            <ul class='slider'> </ul>
+            <nav class='nav'>
+                <ion-icon class='btn prev' name="arrow-back-outline"></ion-icon>
+                <ion-icon class='btn next' name="arrow-forward-outline"></ion-icon>
+            </nav>
+        </section>
+    
+    
+        </main>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        const slider = document.querySelector('.slider');
+
+        function activate(e) {
+            const items = document.querySelectorAll('.item');
+            e.target.matches('.next') && slider.append(items[0])
+            e.target.matches('.prev') && slider.prepend(items[items.length - 1]);
+        }
+
+        document.addEventListener('click', activate, false);
+
+        const nextBtn = document.querySelector('.next');
+        const prevBtn = document.querySelector('.prev');
+        let intervalId;
+
+        function autoSlide() {
+            nextBtn.click(); // Simulate a click on the next button
+        }
+
+        function startAutoSlide() {
+            intervalId = setInterval(autoSlide, 3000); // Auto slide every 3 seconds (adjustable)
+        }
+
+        function stopAutoSlide() {
+            clearInterval(intervalId); // Stop the auto sliding
+        }
+
+        document.addEventListener('DOMContentLoaded', startAutoSlide); // Start auto-sliding when the page loads
+        slider.addEventListener('mouseenter', stopAutoSlide); // Pause auto-sliding when mouse enters slider
+        slider.addEventListener('mouseleave', startAutoSlide); // Resume auto-sliding when mouse leaves slider
+
+
+    </script>
+
+<script>
+    // Function to handle button click event
+    function handleButtonClick(href) {
+    window.open(href, '_blank'); // Open the link in a new tab
+}
+
+// Function to populate slider with content from JSON data
+async function populateSlider() {
+    const jsonData = [
+        { 
+            "title": "Item 1",
+            "description": "Description for item 1",
+            "href": "https://unsplash.it/200/300",
+            "backgroundImage": "https://cdn.mos.cms.futurecdn.net/dP3N4qnEZ4tCTCLq59iysd.jpg"
+        },
+        { 
+            "title": "Item 2",
+            "description": "Description for item 2",
+            "href": "https://unsplash.it/304",
+            "backgroundImage": "https://e-destinaccess.com/revolution/assets/slider-06/da328-pc1.png"
+        },
+        { 
+            "title": "Item 3",
+            "description": "Description for item 2",
+            "href": "https://unsplash.it/312",
+            "backgroundImage": "https://unsplash.it/1800"
+        },
+        { 
+            "title": "Item 4",
+            "description": "Description for item 2",
+            "href": "https://unsplash.it/311",
+            "backgroundImage": "https://unsplash.it/1860"
+        },
+        { 
+            "title": "Item 5",
+            "description": "Description for item 2",
+            "href": "https://unsplash.it/310",
+            "backgroundImage": "https://unsplash.it/1780"
+        },
+        // Add more items as needed
+    ];
+
+    const slider = document.querySelector('.slider');
+
+    jsonData.forEach(itemData => {
+        const li = document.createElement('li');
+        li.classList.add('item');
+        li.style.backgroundImage = `url('${itemData.backgroundImage}')`;
+
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('content');
+
+        const title = document.createElement('h2');
+        title.classList.add('title');
+        title.textContent = itemData.title;
+
+        const description = document.createElement('p');
+        description.classList.add('description');
+        description.textContent = itemData.description;
+
+        const button = document.createElement('button');
+        button.textContent = 'Read More';
+        // Add event listener to the button
+        button.addEventListener('click', () => handleButtonClick(itemData.href));
+
+
+        contentDiv.appendChild(title);
+        contentDiv.appendChild(description);
+        contentDiv.appendChild(button);
+        li.appendChild(contentDiv);
+
+        slider.appendChild(li);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', populateSlider);
+
+</script>
+
+<script>
+            // Function to update the document title based on the URL pathname
+            function updateTitle() {
+            const pageTitle = "Dilli Hang Rai"; // Default title
+            const path = window.location.pathname;
+            const trimmedPath = path.replace(/^\/|\.html$/g, ''); // Remove leading slash and '.html' extension
+
+            // Update the document title with the trimmed path
+            document.title = `${pageTitle} | ${trimmedPath}`;
+        }
+
+        // Call the function when the page loads and whenever the URL changes
+        window.addEventListener('load', updateTitle);
+        window.addEventListener('popstate', updateTitle);
+</script>
+
+</body>
+
+</html>
